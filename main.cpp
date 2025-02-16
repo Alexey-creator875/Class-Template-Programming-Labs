@@ -1,6 +1,10 @@
 #include <iostream>
 
-int main(int, char**) {
-    std::cout << "Hello world!" << std::endl;
+#include "mymath/mymath.h"
+
+int main() {
+    std::cout << "Я умею суммировать! Зацени 1+1=";
+    std::cout << mymath::sum(10, 32) << std::endl;
+
     return 0;
 }
