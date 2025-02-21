@@ -1,6 +1,7 @@
-#include <iostream>
+#include "Planet/Planet.h"
+#include "PlanetsExecutor.h"
 
 int main(int, char**) {
-    std::cout << "Hello world!" << std::endl;
+    PlanetsExecutor::RunApplication();
     return 0;
 }
