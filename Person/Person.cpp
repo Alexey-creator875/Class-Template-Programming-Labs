@@ -1,4 +1,4 @@
-#include "Planet.h"
+#include "Person.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -12,104 +12,104 @@ const size_t kMinArraySize = 1;
 const size_t kUnit = 1;
 }  // namespace
 
-Planet::Planet() {
+Person::Person() {
     name = new char;
     *name = '\0';
 
-    diameter = 0;
-    inhabited = false;
-    satellites = 0;
+    age = 0;
+    height = 0;
+    weight = 0;
 }
 
-Planet::Planet(const char* name, int diameter, bool inhabited, int satellites) {
+Person::Person(const char* name, int age, int height, int weight) {
     this->name = new char[std::strlen(name) + 1];
     std::strcpy(this->name, name);
 
-    this->diameter = diameter;
-    this->inhabited = inhabited;
-    this->satellites = satellites;
+    this->age = age;
+    this->height = height;
+    this->weight = weight;
 }
 
-Planet::Planet(const Planet& other) {
+Person::Person(const Person& other) {
     name = new char[std::strlen(other.name) + 1];
     std::strcpy(name, other.name);
     name[std::strlen(other.name)] = '\0';
-    diameter = other.diameter;
-    inhabited = other.inhabited;
-    satellites = other.satellites;
+    age = other.age;
+    height = other.height;
+    weight = other.weight;
 }
 
-Planet::~Planet() {
+Person::~Person() {
     delete[] name;
 }
 
-Planet& Planet::operator=(const Planet& object) {
+Person& Person::operator=(const Person& object) {
     if (this == &object) {
         return *this;
     }
 
     setName(object.name);
-    diameter = object.diameter;
-    inhabited = object.inhabited;
-    satellites = object.satellites;
+    age = object.age;
+    height = object.height;
+    weight = object.weight;
 
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& out, const Planet& object) {
-    out << object.name << '\t' << object.diameter << '\t' << std::boolalpha << object.inhabited << '\t' << object.satellites << '\n';
+std::ostream& operator<<(std::ostream& out, const Person& object) {
+    out << object.name << '\t' << object.age << '\t' << std::boolalpha << object.height << '\t' << object.weight << '\n';
     return out;
 }
 
-std::ifstream& operator>>(std::ifstream& fin, Planet& object) {
+std::ifstream& operator>>(std::ifstream& fin, Person& object) {
     char name[kDefaultNameSize];
     fin >> name;
     object.setName(name);
-    fin >> object.diameter >> object.inhabited >> object.satellites;
+    fin >> object.age >> object.height >> object.weight;
     return fin;
 }
 
-std::ofstream& operator<<(std::ofstream& fout, const Planet& object) {
-    fout << object.name << '\t' << object.diameter << '\t' << object.inhabited << '\t' << object.satellites << '\n';
+std::ofstream& operator<<(std::ofstream& fout, const Person& object) {
+    fout << object.name << '\t' << object.age << '\t' << object.height << '\t' << object.weight << '\n';
     return fout;
 }
 
-void Planet::setName(const char* name) {
+void Person::setName(const char* name) {
     delete[] this->name;
     this->name = new char[std::strlen(name) + 1];
     std::strcpy(this->name, name);
     this->name[std::strlen(name) + 1] = '\0';
 }
 
-void Planet::setDiameter(int diameter) {
-    this->diameter = diameter;
+void Person::setAge(int age) {
+    this->age = age;
 }
 
-void Planet::setInhabited(bool inhabited) {
-    this->inhabited = inhabited;
+void Person::setHeight(int height) {
+    this->height = height;
 }
 
-void Planet::setSatellites(int satellites) {
-    this->satellites = satellites;
+void Person::setWeight(int weight) {
+    this->weight = weight;
 }
 
-char* Planet::getName() {
+char* Person::getName() {
     return name;
 }
 
-int Planet::getDiameter() {
-    return diameter;
+int Person::getAge() {
+    return age;
 }
 
-bool Planet::getInhabited() {
-    return inhabited;
+bool Person::getHeight() {
+    return height;
 }
 
-int Planet::getSatellites() {
-    return satellites;
+int Person::getWeight() {
+    return weight;
 }
 
-int Planet::readArrayFromFile(Planet*& array, size_t& size, const char* fileName) {
+int Person::readArrayFromFile(Person*& array, size_t& size, const char* fileName) {
     std::ifstream file(fileName);
 
     if (!file) {
@@ -121,7 +121,7 @@ int Planet::readArrayFromFile(Planet*& array, size_t& size, const char* fileName
     }
 
     file >> size;
-    array = new Planet[size];
+    array = new Person[size];
 
     for (size_t i = 0; i < size; ++i) {
         file >> array[i];
@@ -131,7 +131,7 @@ int Planet::readArrayFromFile(Planet*& array, size_t& size, const char* fileName
     return 0;
 }
 
-int Planet::saveArrayToFile(Planet* array, const size_t size, const char* fileName) {
+int Person::saveArrayToFile(Person* array, const size_t size, const char* fileName) {
     if (!array) {
         return -1;
     }
@@ -148,7 +148,7 @@ int Planet::saveArrayToFile(Planet* array, const size_t size, const char* fileNa
     return 0;
 }
 
-int Planet::sortArrayByDiameter(Planet* array, const size_t size) {
+int Person::sortArrayByName(Person* array, const size_t size) {
     if (!array) {
         return -1;
     }
@@ -157,8 +157,7 @@ int Planet::sortArrayByDiameter(Planet* array, const size_t size) {
         return 0;
     }
 
-    Planet pivot = array[0];
-    // int pivot = array[0].getDiameter();
+    Person pivot = array[0];
     size_t leftPointer = 0;
     size_t rightPointer = size - kUnit;
     bool foundLessThanPivot = false;
@@ -174,29 +173,29 @@ int Planet::sortArrayByDiameter(Planet* array, const size_t size) {
 
         if (leftPointer != rightPointer) {
             std::swap(array[leftPointer].name, array[rightPointer].name);
-            std::swap(array[leftPointer].diameter, array[rightPointer].diameter);
-            std::swap(array[leftPointer].inhabited, array[rightPointer].inhabited);
-            std::swap(array[leftPointer].satellites, array[rightPointer].satellites);
+            std::swap(array[leftPointer].age, array[rightPointer].age);
+            std::swap(array[leftPointer].height, array[rightPointer].height);
+            std::swap(array[leftPointer].weight, array[rightPointer].weight);
             foundLessThanPivot = true;
         }
     }
 
     if (!foundLessThanPivot) {
-        Planet::sortArrayByDiameter(array + kUnit, size - kUnit);
+        Person::sortArrayByName(array + kUnit, size - kUnit);
         return 0;
     }
 
-    Planet::sortArrayByDiameter(array, leftPointer);
-    Planet::sortArrayByDiameter(array + rightPointer, size - rightPointer);
+    Person::sortArrayByName(array, leftPointer);
+    Person::sortArrayByName(array + rightPointer, size - rightPointer);
     return 0;
 }
 
-int Planet::pushBack(Planet*& array, size_t& size, const Planet& item) {
+int Person::pushBack(Person*& array, size_t& size, const Person& item) {
     if (!array) {
         return -1;
     }
 
-    Planet* newArray = new Planet[size + 1];
+    Person* newArray = new Person[size + 1];
 
     for (size_t i = 0; i < size; ++i) {
         newArray[i] = array[i];
@@ -209,7 +208,7 @@ int Planet::pushBack(Planet*& array, size_t& size, const Planet& item) {
     return 0;
 }
 
-size_t Planet::findPlanetByName(Planet* array, const size_t size, const char* name, bool& validIndex) {
+size_t Person::findPersonByName(Person* array, const size_t size, const char* name, bool& validIndex) {
     if (!array) {
         validIndex = false;
         return 1;
@@ -230,12 +229,12 @@ size_t Planet::findPlanetByName(Planet* array, const size_t size, const char* na
     return 0;
 }
 
-int Planet::removeFromArray(Planet*& array, size_t& size, const size_t removeIndex) {
+int Person::removeFromArray(Person*& array, size_t& size, const size_t removeIndex) {
     if (!array) {
         return -1;
     }
 
-    Planet* newArray = new Planet[size - 1];
+    Person* newArray = new Person[size - 1];
     size_t newArrayIndex = 0;
 
     for (size_t i = 0; i < size; ++i) {
@@ -252,14 +251,14 @@ int Planet::removeFromArray(Planet*& array, size_t& size, const size_t removeInd
     return 0;
 }
 
-bool operator<(const Planet& left, const Planet& right) {
-    return left.diameter < right.diameter;
+bool operator<(const Person& left, const Person& right) {
+    return (std::strcmp(left.name, right.name) < 0);
 }
 
-bool operator>=(const Planet& left, const Planet& right) {
+bool operator>=(const Person& left, const Person& right) {
     return right < left;
 }
 
-bool operator==(const Planet& left, const char* string) {
+bool operator==(const Person& left, const char* string) {
     return (!std::strcmp(left.name, string));
 }

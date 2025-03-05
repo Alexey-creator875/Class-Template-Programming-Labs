@@ -1,5 +1,4 @@
-#include "Planet/Planet.h"
-#include "PlanetsExecutor.h"
+#include "DataBaseExecutor.h"
 
 int main(int, char**) {
     PlanetsExecutor::RunApplication();
