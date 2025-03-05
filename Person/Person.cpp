@@ -172,10 +172,7 @@ int Person::sortArrayByName(Person* array, const size_t size) {
         }
 
         if (leftPointer != rightPointer) {
-            std::swap(array[leftPointer].name, array[rightPointer].name);
-            std::swap(array[leftPointer].age, array[rightPointer].age);
-            std::swap(array[leftPointer].height, array[rightPointer].height);
-            std::swap(array[leftPointer].weight, array[rightPointer].weight);
+            std::swap(array[leftPointer], array[rightPointer]);
             foundLessThanPivot = true;
         }
     }

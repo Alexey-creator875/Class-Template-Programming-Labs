@@ -173,10 +173,7 @@ int Planet::sortArrayByDiameter(Planet* array, const size_t size) {
         }
 
         if (leftPointer != rightPointer) {
-            std::swap(array[leftPointer].name, array[rightPointer].name);
-            std::swap(array[leftPointer].diameter, array[rightPointer].diameter);
-            std::swap(array[leftPointer].inhabited, array[rightPointer].inhabited);
-            std::swap(array[leftPointer].satellites, array[rightPointer].satellites);
+            std::swap(array[leftPointer], array[rightPointer]);
             foundLessThanPivot = true;
         }
     }
