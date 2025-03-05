@@ -436,7 +436,7 @@ void SelectConstructionTeam() {
 
         std::cout << "Enter '1' to read construction team from file\n"
                   << "Enter '2' to save construction team to file\n"
-                  << "Enter '3' to sort construction team by age\n"
+                  << "Enter '3' to sort construction team by name\n"
                   << "Enter '4' to add new person to construction team\n"
                   << "Enter '5' to remove person from construction team\n"
                   << "Enter '6' to edit construction team\n"
