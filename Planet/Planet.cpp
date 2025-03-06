@@ -158,7 +158,6 @@ int Planet::sortArrayByDiameter(Planet* array, const size_t size) {
     }
 
     Planet pivot = array[0];
-    // int pivot = array[0].getDiameter();
     size_t leftPointer = 0;
     size_t rightPointer = size - kUnit;
     bool foundLessThanPivot = false;

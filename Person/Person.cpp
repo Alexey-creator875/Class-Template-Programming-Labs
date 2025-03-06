@@ -40,7 +40,6 @@ Person::Person(const Person& other) {
 }
 
 Person::~Person() {
-    std::cout << name << std::endl;
     delete[] name;
 }
 
