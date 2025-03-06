@@ -40,6 +40,7 @@ Person::Person(const Person& other) {
 }
 
 Person::~Person() {
+    std::cout << name << std::endl;
     delete[] name;
 }
 
@@ -231,21 +232,29 @@ int Person::removeFromArray(Person*& array, size_t& size, const size_t removeInd
         return -1;
     }
 
-    Person* newArray = new Person[size - 1];
-    size_t newArrayIndex = 0;
-
-    for (size_t i = 0; i < size; ++i) {
-        if (i == removeIndex) {
-            continue;
-        }
-
-        newArray[newArrayIndex++] = array[i];
+    for (size_t i = removeIndex; i < size - 1; ++i) {
+        array[i] = array[i + 1];
     }
 
     --size;
-    delete[] array;
-    array = newArray;
+
     return 0;
+
+    // Person* newArray = new Person[size - 1];
+    // size_t newArrayIndex = 0;
+
+    // for (size_t i = 0; i < size; ++i) {
+    //     if (i == removeIndex) {
+    //         continue;
+    //     }
+
+    //     newArray[newArrayIndex++] = array[i];
+    // }
+
+    // --size;
+    // delete[] array;
+    // array = newArray;
+    // return 0;
 }
 
 bool operator<(const Person& left, const Person& right) {

@@ -327,7 +327,7 @@ void AddPersonToConstructionTeam(Person*& constructionTeam, size_t& size) {
     std::cin >> age;
 
     std::cout << "Enter height:\n";
-    bool height = 0;
+    int height = 0;
     std::cin >> height;
 
     std::cout << "Enter weight:\n";

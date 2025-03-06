@@ -78,7 +78,7 @@ void Planet::setName(const char* name) {
     delete[] this->name;
     this->name = new char[std::strlen(name) + 1];
     std::strcpy(this->name, name);
-    this->name[std::strlen(name) + 1] = '\0';
+    this->name[std::strlen(name)] = '\0';
 }
 
 void Planet::setDiameter(int diameter) {
@@ -232,21 +232,29 @@ int Planet::removeFromArray(Planet*& array, size_t& size, const size_t removeInd
         return -1;
     }
 
-    Planet* newArray = new Planet[size - 1];
-    size_t newArrayIndex = 0;
-
-    for (size_t i = 0; i < size; ++i) {
-        if (i == removeIndex) {
-            continue;
-        }
-
-        newArray[newArrayIndex++] = array[i];
+    for (size_t i = removeIndex; i < size - 1; ++i) {
+        array[i] = array[i + 1];
     }
 
     --size;
-    delete[] array;
-    array = newArray;
+
     return 0;
+
+    // Planet* newArray = new Planet[size - 1];
+    // size_t newArrayIndex = 0;
+
+    // for (size_t i = 0; i < size; ++i) {
+    //     if (i == removeIndex) {
+    //         continue;
+    //     }
+
+    //     newArray[newArrayIndex++] = array[i];
+    // }
+
+    // --size;
+    // delete[] array;
+    // array = newArray;
+    // return 0;
 }
 
 bool operator<(const Planet& left, const Planet& right) {
