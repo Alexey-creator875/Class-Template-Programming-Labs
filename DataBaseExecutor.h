@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Planet/Planet.h"
-#include "Person/Person.h"
-
 #include <cstddef>
+
+#include "Person/Person.h"
+#include "Planet/Planet.h"
 
 namespace PlanetsExecutor {
 enum class Mode {

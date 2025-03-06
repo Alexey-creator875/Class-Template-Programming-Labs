@@ -1,8 +1,8 @@
 #include "DataBaseExecutor.h"
 
 #include <cstddef>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 #include "Planet/Planet.h"
 
@@ -194,7 +194,7 @@ void EditSolarSystem(Planet*& solarSystem, const size_t size) {
                   << "Enter '3' to change inhabited\n"
                   << "Enter '4' to change number of satellites\n"
                   << "Enter '0' to finish editing\n";
-        
+
         std::cin >> command;
 
         switch (static_cast<EditPlanet>(command)) {
@@ -388,7 +388,7 @@ void EditConstructionTeam(Person*& constructionTeam, const size_t size) {
                   << "Enter '3' to change height\n"
                   << "Enter '4' to change weight\n"
                   << "Enter '0' to finish editing\n";
-        
+
         std::cin >> command;
 
         switch (static_cast<EditPerson>(command)) {
@@ -489,7 +489,7 @@ void RunApplication() {
 
     std::cout << "Enter '1' to select Solar system\n"
               << "Enter '2' to select construction team\n";
-    
+
     std::cin >> mode;
 
     switch (static_cast<Mode>(mode)) {
