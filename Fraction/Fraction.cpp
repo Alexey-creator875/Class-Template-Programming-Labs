@@ -57,7 +57,7 @@ Fraction::Fraction(const char* string) : Fraction() {
         denominator = std::stoi(std::strchr(string, '/') + kNextSymbol);
 
         if (denominator == 0) {
-            throw std::runtime_error("division by zero");
+            throw std::runtime_error("disvision by zero");
         }
 
         int integerPart = std::stoi(string);
@@ -68,7 +68,7 @@ Fraction::Fraction(const char* string) : Fraction() {
         denominator = std::stoi(std::strchr(string, '/') + kNextSymbol);
 
         if (denominator == 0) {
-            throw std::runtime_error("division by zero");
+            throw std::runtime_error("disvision by zero");
         }
 
         numerator = std::stoi(string);

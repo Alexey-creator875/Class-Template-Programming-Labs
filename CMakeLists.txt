@@ -6,7 +6,11 @@ project(${project})
 set(CMAKE_CXX_STANDARD 20)
 
 set(${project}_SOURCES
-        main.cpp)
+        main.cpp
+        FractionExecutor.cpp)
+
+set(${project}_HEADERS
+        FractionExecutor.h)
 
 add_subdirectory(Fraction)
 
