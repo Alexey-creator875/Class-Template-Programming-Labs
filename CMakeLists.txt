@@ -8,8 +8,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(${project}_SOURCES
         main.cpp)
 
-# set(${project}_HEADERS)
-
 add_subdirectory(Fraction)
 
 set(${project}_SOURCE_LIST
