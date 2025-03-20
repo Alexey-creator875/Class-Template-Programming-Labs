@@ -54,14 +54,24 @@ Fraction::Fraction(double number) {
 
 Fraction::Fraction(const char* string) : Fraction() {   
     if (std::strchr(string, ' ') && std::strchr(string, '/')) {
-        int integerPart = std::stoi(string);
         denominator = std::stoi(std::strchr(string, '/') + kNextSymbol);
+
+        if (denominator == 0) {
+            throw std::runtime_error("division by zero");
+        }
+
+        int integerPart = std::stoi(string);
         numerator = (std::abs(integerPart) * denominator + std::stoi(std::strchr(string, ' ') + kNextSymbol)) * ((integerPart < 0) ? -1 : 1);
     }
 
     if (!std::strchr(string, ' ') && std::strchr(string, '/')) {
-        numerator = std::stoi(string);
         denominator = std::stoi(std::strchr(string, '/') + kNextSymbol);
+
+        if (denominator == 0) {
+            throw std::runtime_error("division by zero");
+        }
+
+        numerator = std::stoi(string);
     }
 
     if (!std::strchr(string, '/')) {
