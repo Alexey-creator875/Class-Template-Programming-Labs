@@ -52,7 +52,7 @@ Fraction::Fraction(double number) {
     this->reduce();
 }
 
-Fraction::Fraction(const char* string) : Fraction() {
+Fraction::Fraction(const char* string) : Fraction() {   
     if (std::strchr(string, ' ') && std::strchr(string, '/')) {
         int integerPart = std::stoi(string);
         denominator = std::stoi(std::strchr(string, '/') + kNextSymbol);
