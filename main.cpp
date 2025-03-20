@@ -41,5 +41,8 @@ int main() {
     std::cout << "y=" << y << std::endl;
     y += dbl + i + x;
     std::cout << "y=" << y << std::endl;
+    // проверка перегруженной операции "+="
+    y -= dbl;
+    std::cout << "y=" << y << std::endl;
     return 0;
 }

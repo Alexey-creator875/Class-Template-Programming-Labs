@@ -133,3 +133,10 @@ Fraction& Fraction::operator+=(const Fraction& second) {
 Fraction operator+(const double first, const Fraction& second) {
     return Fraction(first) + second;
 }
+
+Fraction& Fraction::operator-=(const Fraction& second) {
+    numerator = numerator * second.denominator - second.numerator * denominator;
+    denominator *= second.denominator;
+    this->reduce();
+    return *this;
+}

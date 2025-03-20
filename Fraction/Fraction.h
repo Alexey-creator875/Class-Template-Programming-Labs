@@ -25,5 +25,6 @@ class Fraction {
 
     Fraction operator+(const Fraction& second);
     Fraction& operator+=(const Fraction& second);
+    Fraction& operator-=(const Fraction& second);
     friend Fraction operator+(const double first, const Fraction& second);
 };
