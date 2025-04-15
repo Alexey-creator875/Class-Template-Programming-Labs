@@ -1,14 +1,31 @@
 #include "Executor.h"
-#include "Stack/MyStack.h"
 
 #include <iostream>
 #include <stdexcept>
 
-namespace {
+#include "Stack/MyStack.h"
 
+namespace {
+const int kFirstNonTrivialDivisor = 2;
+const int kUnit = 1;
+
+void PrintPrimeFactorizarion(const int number, const MyStack<int>& stack) {
+    std::cout << number << " = " << stack << '\n';
 }
+}  // namespace
 
 namespace Executor {
+void Multipliers(int number, MyStack<int>& stack) {
+    int buffer = number;
+
+    for (int i = kFirstNonTrivialDivisor; (buffer != kUnit) && (i < number); ++i) {
+        while (buffer % i == 0) {
+            stack.push(i);
+            buffer /= i;
+        }
+    }
+}
+
 void RunApplication() {
     int number = 0;
     std::cout << "Enter natural number:\n";
@@ -18,20 +35,12 @@ void RunApplication() {
         throw std::runtime_error("invalid number for prime factorization");
     }
 
-    int buffer = number;
     MyStack<int> stack;
-
-    for (int i = 2; (buffer != 1) && (i < number); ++i) {
-        while (buffer % i == 0) {
-            stack.push(i);
-            buffer /= i;
-        }
-    }
-
-    std::cout << number << " = " << stack << '\n';
+    Multipliers(number, stack);
+    std::cout << "\nPrime Factorization:\n";
+    PrintPrimeFactorizarion(number, stack);
 
     stack.reverse();
-
-    std::cout << number << " = " << stack << '\n';
+    PrintPrimeFactorizarion(number, stack);
 }
-}
+}  // namespace Executor

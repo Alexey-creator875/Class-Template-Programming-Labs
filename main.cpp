@@ -4,10 +4,10 @@
 
 int main(int, char**) {
     try {
-        Executor::RunApplication();  
+        Executor::RunApplication();
     } catch (const std::exception& e) {
         std::cout << e.what() << '\n';
     }
-    
+
     return 0;
 }
