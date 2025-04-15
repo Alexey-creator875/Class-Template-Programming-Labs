@@ -5,21 +5,21 @@ project(${project})
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(${project}_SOURCES
-        main.cpp
-        Executor.cpp)
+set(SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Executor.cpp)
 
-set(${project}_HEADERS
-        Executor.h)
+set(HEADERS
+        ${CMAKE_CURRENT_SOURCE_DIR}/Executor.h)
 
 add_subdirectory(Stack)
 
-set(${project}_SOURCE_LIST
-        ${${project}_SOURCES}
-        ${${project}_HEADERS})
+set(SOURCE_LIST
+        ${SOURCES}
+        ${HEADERS})
 
 add_executable(${project}
-        ${${project}_SOURCE_LIST})
+        ${SOURCE_LIST})
 
 target_link_libraries(${project} Stack)
 

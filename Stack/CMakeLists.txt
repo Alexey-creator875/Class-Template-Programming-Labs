@@ -5,16 +5,14 @@ project(${project})
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(${project}_SOURCES
-        MyStack.cpp)
+set(SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/MyStack.cpp)
 
-set(${project}_HEADERS
-        MyStack.h)
+set(HEADERS
+        ${CMAKE_CURRENT_SOURCE_DIR}/MyStack.h)
 
-set(${project}_SOURCE_LIST
-        ${${project}_SOURCES}
-        ${${project}_HEADERS})
+set(SOURCE_LIST
+        ${SOURCES}
+        ${HEADERS})
 
-add_library(${project}
-        STATIC
-        ${${project}_SOURCE_LIST})
+add_library(${project} STATIC ${SOURCE_LIST})
