@@ -12,11 +12,12 @@ const size_t kReductionFactor = 4;
 const size_t kUnit = 1;
 }  // namespace
 
+template<typename T>
 class MyVector {
  private:
     size_t size;
     size_t capacity;
-    int* vector;
+    T* vector;
 
     void resize() {
         if (size >= capacity) {
@@ -27,8 +28,8 @@ class MyVector {
             return;
         }
 
-        int* buffer = vector;
-        vector = new int[capacity];
+        T* buffer = vector;
+        vector = new T[capacity];
         std::copy(buffer, buffer + size, vector);
         delete[] buffer;
         return;
@@ -38,9 +39,9 @@ class MyVector {
     MyVector() {
         capacity = kDefaultVectorCapacity;
         size = 0;
-        vector = new int[kDefaultVectorCapacity];
+        vector = new T[kDefaultVectorCapacity];
     }
-    MyVector(int element) : MyVector() {
+    MyVector(const T& element) : MyVector() {
         *vector = element;
         ++size;
     }
@@ -48,13 +49,13 @@ class MyVector {
     MyVector(const MyVector& object) {
         capacity = object.capacity;
         size = object.size;
-        vector = new int[capacity];
+        vector = new T[capacity];
         std::copy(object.vector, object.vector + object.size, vector);
     }
 
     ~MyVector() { delete[] vector; }
 
-    void pushBack(const int element) {
+    void pushBack(const T& element) {
         if (size >= capacity) {
             resize();
         }
@@ -80,7 +81,7 @@ class MyVector {
         return true;
     }
 
-    int findElement(const int element) {
+    int findElement(const T& element) {
         for (size_t i = 0; i < size; ++i) {
             if (vector[i] == element) {
                 return i;
@@ -90,7 +91,7 @@ class MyVector {
         return -1;
     }
 
-    int operator[](const int index) const {
+    T operator[](const int index) const {
         if (index < 0 && index >= size) {
             throw std::runtime_error("index out of boundary");
         }
@@ -98,7 +99,7 @@ class MyVector {
         return vector[index];
     }
 
-    int& operator[](const int index) {
+    T& operator[](const int index) {
         if (index < 0 && index >= size) {
             throw std::runtime_error("index out of boundary");
         }
@@ -113,7 +114,7 @@ class MyVector {
 
         capacity = object.capacity;
         size = object.size;
-        vector = new int[object.capacity];
+        vector = new T[object.capacity];
 
         std::copy(object.vector, object.vector + object.size, vector);
 
@@ -126,13 +127,5 @@ class MyVector {
         }
 
         return out;
-    }
-
-    void print() {
-        for (size_t i = 0; i < size; ++i) {
-            std::cout << vector[i] << ' ';
-        }
-
-        std::cout << '\n';
     }
 };
