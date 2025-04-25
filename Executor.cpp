@@ -16,7 +16,7 @@ void RunApplication() {
     set1.remove(4);
     set1.remove(8);
 
-    std::cout << "New first set:\n";
+    std::cout << "New first set (removed 4 and 8):\n";
     std::cout << set1 << "\n\n";
 
     set1.append(4);
@@ -34,6 +34,9 @@ void RunApplication() {
     std::cout << set2 << "\n\n";
 
     MySet<int> set3 = set1;
+
+    std::cout << "Third set (based on first one):\n";
+    std::cout << set3 << "\n\n";
 
     std::cout << "Set operations\n"; 
 
