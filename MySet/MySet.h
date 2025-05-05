@@ -2,10 +2,10 @@
 
 #include "../MyVector/MyVector.h"
 
-#include <algorithm>
 #include <cstddef>
 #include <iostream>
 #include <stdexcept>
+#include <cstring>
 
 namespace {
 const size_t kHalfDivisor = 2;
@@ -14,149 +14,235 @@ const size_t kHalfDivisor = 2;
 template<class T>
 class MySet : protected MyVector<T> {
  private:
-    int findElement(const T& element) const {
-        if (this->size == 0) {
-            return -1;
-        }
+    int findElement(const T element) const;
 
-        size_t leftBoundary = 0;
-        size_t rightBoundary = this->size - 1;
+ public:
+    MySet() = default;
+    MySet(const T element) : MyVector<T>(element) {}
+    MySet(const MySet<T>& object) : MyVector<T>(object) {}
 
-        while ((rightBoundary - leftBoundary) > 1) {
-            size_t middle = (leftBoundary + rightBoundary) / kHalfDivisor;
+    bool isElement(const T& element) const;
+    void append(const T& element);
+    void remove(const T& element);
 
-            if ((*this)[middle] > element) {
-                rightBoundary = middle;
-            } else {
-                leftBoundary = middle;
-            }
-        }
+    MySet operator+=(const MySet& object);
+    MySet operator-=(const MySet& object);
+    MySet operator*=(const MySet& object);
 
-        if ((*this)[leftBoundary] == element) {
-            return static_cast<int>(leftBoundary);
-        }
+    template<class F>
+    friend MySet<F> operator+(const MySet<F>& first, const MySet<F>& second);
 
-        if ((*this)[rightBoundary] == element) {
-            return static_cast<int>(rightBoundary);
-        }
+    template<class F>
+    friend MySet<F> operator-(const MySet<F>& first, const MySet<F>& second);
 
+    template<class F>
+    friend MySet<F> operator*(const MySet<F>& first, const MySet<F>& second);
+
+    template<class F>
+    friend bool operator==(const MySet<F>& first, const MySet<F>& second);
+
+    template<class F>
+    friend std::ostream& operator<<(std::ostream& out, const MySet<F>& object);
+};
+
+template<class T>
+int MySet<T>::findElement(const T element) const {
+    if (this->size == 0) {
         return -1;
     }
 
- public:
-    bool isElement(const T& element) const {
-        return findElement(element) != -1;
-    }
+    size_t leftBoundary = 0;
+    size_t rightBoundary = this->size - 1;
 
-    void append(const T& element) {
-        if (!isElement(element)) {
-            MyVector<T>::pushBack(element);
-            MyVector<T>::sort();
+    while ((rightBoundary - leftBoundary) > 1) {
+        size_t middle = (leftBoundary + rightBoundary) / kHalfDivisor;
+
+        if ((*this)[middle] > element) {
+            rightBoundary = middle;
+        } else {
+            leftBoundary = middle;
         }
     }
 
-    void remove(const T& element) {
-        if (isElement(element)) {
-            MyVector<T>::deleteElement(findElement(element));
+    if ((*this)[leftBoundary] == element) {
+        return static_cast<int>(leftBoundary);
+    }
+
+    if ((*this)[rightBoundary] == element) {
+        return static_cast<int>(rightBoundary);
+    }
+
+    return -1;
+}
+
+template<>
+int MySet<char*>::findElement(char* string) const {
+    if (this->size == 0) {
+        return -1;
+    }
+
+    size_t leftBoundary = 0;
+    size_t rightBoundary = this->size - 1;
+
+    while ((rightBoundary - leftBoundary) > 1) {
+        size_t middle = (leftBoundary + rightBoundary) / kHalfDivisor;
+
+        if (std::strcmp((*this)[middle], string) > 0) {
+            rightBoundary = middle;
+        } else {
+            leftBoundary = middle;
         }
     }
 
-    MySet operator+=(const MySet& object) {
-        for (size_t i = 0; i < object.size; ++i) {
-            this->append(object[i]);
-        }
-
-        return *this;
+    if (!std::strcmp((*this)[leftBoundary], string)) {
+        return static_cast<int>(leftBoundary);
     }
 
-    MySet operator-=(const MySet& object) {
-        for (size_t i = 0; i < object.size; ++i) {
-            this->remove(object[i]);
-        }
-
-        return *this;
+    if (!std::strcmp((*this)[rightBoundary], string)) {
+        return static_cast<int>(rightBoundary);
     }
 
-    MySet operator*=(const MySet& object) {
-        MySet newSet;
+    return -1;
+}
 
-        for (size_t i = 0; i < this->size; ++i) {
-            if (object.isElement((*this)[i])) {
-                newSet.append((*this)[i]);
-            }
-        }
+template<class T>
+bool MySet<T>::isElement(const T& element) const {
+    return findElement(element) != -1;
+}
 
-        *this = newSet;
+template<class T>
+void MySet<T>::append(const T& element) {
+    if (!isElement(element)) {
+        MyVector<T>::pushBack(element);
+        MyVector<T>::sort();
+    }
+}
 
-        return *this;
+template<class T>
+void MySet<T>::remove(const T& element) {
+    if (isElement(element)) {
+        MyVector<T>::deleteElement(findElement(element));
+    }
+}
+
+template<class T>
+MySet<T> MySet<T>::operator+=(const MySet<T>& object) {
+    for (size_t i = 0; i < object.size; ++i) {
+        this->append(object[i]);
     }
 
-    friend MySet operator+(const MySet& first, const MySet& second) {
-        MySet newSet;
+    return *this;
+}
 
-        for (size_t i = 0; i < first.size; ++i) {
+template<class T>
+MySet<T> MySet<T>::operator-=(const MySet<T>& object) {
+    for (size_t i = 0; i < object.size; ++i) {
+        this->remove(object[i]);
+    }
+
+    return *this;
+}
+
+template<class T>
+MySet<T> MySet<T>::operator*=(const MySet<T>& object) {
+    MySet<T> newSet;
+
+    for (size_t i = 0; i < this->size; ++i) {
+        if (object.isElement((*this)[i])) {
+            newSet.append((*this)[i]);
+        }
+    }
+
+    *this = newSet;
+
+    return *this;
+}
+
+template<class F>
+MySet<F> operator+(const MySet<F>& first, const MySet<F>& second) {
+    MySet<F> newSet;
+
+    for (size_t i = 0; i < first.size; ++i) {
+        newSet.append(first[i]);
+    }
+
+    for (size_t i = 0; i < second.size; ++i) {
+        newSet.append(second[i]);
+    }
+
+    return newSet;
+}
+
+template<class F>
+MySet<F> operator-(const MySet<F>& first, const MySet<F>& second) {
+    MySet<F> newSet;
+
+    for (size_t i = 0; i < first.size; ++i) {
+        if (!second.isElement(first[i])) {
             newSet.append(first[i]);
         }
-
-        for (size_t i = 0; i < second.size; ++i) {
-            newSet.append(second[i]);
-        }
-
-        return newSet;
     }
 
-    friend MySet operator-(const MySet& first, const MySet& second) {
-        MySet newSet;
+    return newSet;
+}
 
-        for (size_t i = 0; i < first.size; ++i) {
-            if (!second.isElement(first[i])) {
-                newSet.append(first[i]);
-            }
+template<class F>
+MySet<F> operator*(const MySet<F>& first, const MySet<F>& second) {
+    MySet<F> newSet;
+
+    for (size_t i = 0; i < first.size; ++i) {
+        if (second.isElement(first[i])) {
+            newSet.append(first[i]);
         }
-
-        return newSet;
     }
 
-    friend MySet operator*(const MySet& first, const MySet& second) {
-        MySet newSet;
+    return newSet;
+}
 
-        for (size_t i = 0; i < first.size; ++i) {
-            if (second.isElement(first[i])) {
-                newSet.append(first[i]);
-            }
-        }
-
-        return newSet;
+template<class F>
+bool operator==(const MySet<F>& first, const MySet<F>& second) {
+    if (first.size != second.size) {
+        return false;
     }
 
-    friend bool operator==(const MySet& first, const MySet& second) {
-        if (first.size != second.size) {
+    for (size_t i = 0; i < first.size; ++i) {
+        if (!(first[i] == second[i])) {
             return false;
         }
-
-        for (size_t i = 0; i < first.size; ++i) {
-            if (!(first[i] == second[i])) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
-    friend std::ostream& operator<<(std::ostream& out, const MySet& object) {
-        if (object.size == 0) {
-            out << "{}";
-            return out;
+    return true;
+}
+
+template<>
+bool operator==(const MySet<char*>& first, const MySet<char*>& second) {
+    if (first.size != second.size) {
+        return false;
+    }
+
+    for (size_t i = 0; i < first.size; ++i) {
+        if (std::strcmp(first[i], second[i])) {
+            return false;
         }
+    }
 
-        out << '{';
+    return true;
+}
 
-        for (size_t i = 0; i < object.size - 1; ++i) {
-            out << object[i] << ", ";
-        }
-
-        out << object[object.size - 1] << '}';
-
+template<class F>
+std::ostream& operator<<(std::ostream& out, const MySet<F>& object) {
+    if (object.size == 0) {
+        out << "{}";
         return out;
     }
-};
+
+    out << '{';
+
+    for (size_t i = 0; i < object.size - 1; ++i) {
+        out << object[i] << ", ";
+    }
+
+    out << object[object.size - 1] << '}';
+
+    return out;
+}

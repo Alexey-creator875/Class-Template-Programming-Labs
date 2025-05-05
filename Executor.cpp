@@ -1,6 +1,7 @@
 #include "Executor.h"
 
 #include "MySet/MySet.h"
+#include "MyVector/MyVector.h"
 
 namespace Executor {
 void RunApplication() {
@@ -47,5 +48,62 @@ void RunApplication() {
     std::cout << set1 << " == " << set3 << " => " << (set1 == set3) << '\n';
 
     std::cout << '\n';
+
+    MyVector<char*> v("Hello!");
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    std::cout << "Вектор v: " << v << std::endl;
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    v.pushBack("Привет!");
+    std::cout << "Вектор v: " << v << std::endl;
+    MyVector<char*> v1 = v;
+    std::cout << "Вектор v1: " << v1 << std::endl;
+    for (int i = 0; i < v1.length(); i++)
+        v1.deleteElement(0);
+    std::cout << "Вектор v1: " << v1 << std::endl;
+    MySet<char*> s("Yes"), s1, s2;
+    s.append("Привет!");
+    s.append("No");
+    char *str = "Hello!";
+    s.append(str);
+    std::cout << "Множество s: " << s << std::endl;
+    s1.append("Cat");
+    s1.append("No");
+    s1.append("Привет!");
+    std::cout << "Множество s1: " << s1 << std::endl;
+    s2 = s1 - s;
+    std::cout << "Множество s2=s1-s: " << s2 << std::endl;
+    std::cout << "Множество s1: " << s1 << std::endl;
+    std::cout << "Множество s: " << s << std::endl;
+    s2 = s - s1;
+    std::cout << "Множество s2=s-s1: " << s2 << std::endl;
+    std::cout << "Множество s1: " << s1 << std::endl;
+    std::cout << "Множество s: " << s << std::endl;
+    s2 = s1 + s;
+    std::cout << "Множество s2=s1+s: " << s2 << std::endl;
+    std::cout << "Множество s1: " << s1 << std::endl;
+    std::cout << "Множество s: " << s << std::endl;
+    s2 = s1 * s;
+    std::cout << "Множество s2=s1*s: " << s2 << std::endl;
+    std::cout << "Множество s1: " << s1 << std::endl;
+    std::cout << "Множество s: " << s << std::endl;
+    MySet<char*> s3 = s2;
+    std::cout << "Множество s3=s2: " << s3 << std::endl;
+    if (s3 == s2)
+        std::cout << "Множество s3=s2\n";
+    else
+        std::cout << "Множество s3!=s2\n";
+    if (s3 == s1)
+        std::cout << "Множество s3=s1\n";
+    else
+        std::cout << "Множество s3!=s1\n";
+    if (s1 == s3)
+        std::cout << "Множество s1=s3\n";
+    else
+        std::cout << "Множество s1!=s3\n";
 }
 }
