@@ -2,11 +2,14 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <cstring>
 
 namespace {
 const int kDeffaultTermCoefficient = 0;
 const int kDeffaultTermDegree = 0;
 const int kTermDegreeNotRequiredExplicitIndication = 1;
+
+const int kBufferSize = 50;
 }
 
 Term operator+(const Term& first, const Term& second) {
@@ -36,4 +39,9 @@ std::ostream& operator<<(std::ostream& out, const Term& object) {
     }
 
     return out;
+}
+
+std::istream& operator>>(std::istream& in, Term& object) {
+    char buffer[kBufferSize];
+    std::getline();
 }

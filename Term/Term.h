@@ -12,4 +12,5 @@ class Term {
 
     friend Term operator+(const Term& first, const Term& second);
     friend std::ostream& operator<<(std::ostream& out, const Term& object);
+    friend std::istream& operator>>(std::istream& in, Term& object);
 };
