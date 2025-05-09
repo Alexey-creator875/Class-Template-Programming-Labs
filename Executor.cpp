@@ -45,22 +45,22 @@ void RunApplication() {
     p4 += Term(0, 1);
     p4 += Term(7, 0);
 
-    std::cout << "ascending p4: " << p4 << '\n';
-    p4.changeOrder();
     std::cout << "descending p4: " << p4 << '\n';
+    p4.changeOrder();
+    std::cout << "ascending p4: " << p4 << '\n';
     p4.changeOrder();
 
     Polynomial p5;
     p5 += Term(1, 1);
     p5 += Term(3, 0);
 
-    std::cout << p5 << '\n';
+    std::cout << "p5: " << p5 << '\n';
 
     Polynomial p6;
     p6 += Term(1, 1);
     p6 += Term(-2, 0);
 
-    std::cout << p6 << '\n';
+    std::cout << "p6: " << p6 << '\n';
 
     std::cout << "p5 + p6 = " << (p5 + p6) << '\n';
     std::cout << "p5 * p6 = " << (p5 * p6) << '\n';
