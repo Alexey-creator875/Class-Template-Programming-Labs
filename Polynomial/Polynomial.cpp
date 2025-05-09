@@ -181,23 +181,40 @@ Polynomial& Polynomial::operator+=(const Term& object) {
         return *this;
     }
 
-    // Binary Search better
+    int left = 0;
+    int right = poly.length() - 1;
 
-    for (size_t i = 0; i < poly.length(); ++i) {
-        if (poly[i].degree == object.degree) {
-            if (poly[i].coefficient == -object.coefficient) {
-                poly.deleteElement(i);
-                return *this;
-            }
+    while ((right - left) > 1) {
+        int middle = (left + right) / 2;
 
-            poly[i].coefficient += object.coefficient;
-            return *this;
+        if (poly[middle].degree < object.degree) {
+            (order)? left = middle : right = middle;
+        } else {
+            (order)? right = middle : left = middle;
+
         }
     }
 
-    poly.pushBack(object);
-    poly.sort(order);
+    if ((poly[left].degree != object.degree) && (poly[right].degree != object.degree)) {
+        poly.pushBack(object);
+        poly.sort(order);
+        return *this;
+    }
 
+    int index = 0;
+
+    if (poly[left].degree == object.degree) {
+        index = left;
+    } else if (poly[right].degree == object.degree) {
+        index = right;
+    }
+
+    if (poly[index].coefficient == -object.coefficient) {
+        poly.deleteElement(index);
+        return *this;
+    }
+
+    poly[index].coefficient += object.coefficient;
     return *this;
 }
 
