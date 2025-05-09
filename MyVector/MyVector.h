@@ -29,12 +29,12 @@ class MyVector {
 
     ~MyVector();
 
-    int length();
+    int length() const;
 
     void pushBack(const T element);
     void deleteElement(const int index);
     int findElement(const T element);
-    void sort();
+    void sort(bool ascending = true);
 
     T operator[](int index) const;
     T& operator[](const int index);
@@ -78,7 +78,7 @@ MyVector<T>::MyVector(const T element) {
 }
 
 template<>
-MyVector<char*>::MyVector(char* string) {
+inline MyVector<char*>::MyVector(char* string) {
     capacity = kDefaultVectorCapacity;
     size = 0;
     vector = new char*[kDefaultVectorCapacity];
@@ -96,7 +96,7 @@ MyVector<T>::MyVector(const MyVector<T>& object) {
 }
 
 template<>
-MyVector<char*>::MyVector(const MyVector<char*>& object) {
+inline MyVector<char*>::MyVector(const MyVector<char*>& object) {
     capacity = object.capacity;
     size = object.size;
     vector = new char*[capacity];
@@ -114,7 +114,7 @@ MyVector<T>::~MyVector() {
 }
 
 template<>
-MyVector<char*>::~MyVector() {
+inline MyVector<char*>::~MyVector() {
     for (size_t i = 0; i < capacity; ++i) {
         if (vector[i]) {
             delete[] vector[i];
@@ -125,7 +125,7 @@ MyVector<char*>::~MyVector() {
 }
 
 template<class T>
-int MyVector<T>::length() {
+int MyVector<T>::length() const {
     return size;
 }
 
@@ -139,7 +139,7 @@ void MyVector<T>::pushBack(const T element) {
 }
 
 template<>
-void MyVector<char*>::pushBack(char* string) {
+void inline MyVector<char*>::pushBack(char* string) {
     if (size >= capacity) {
             resize();
         }
@@ -171,7 +171,7 @@ void MyVector<T>::deleteElement(const int index) {
 }
 
 template<>
-void MyVector<char*>::deleteElement(const int index) {
+void inline MyVector<char*>::deleteElement(const int index) {
     if (index < 0 || index >= size) {
         throw std::runtime_error("index out of boundary");
     }
@@ -201,7 +201,7 @@ int MyVector<T>::findElement(const T element) {
 }
 
 template<>
-int MyVector<char*>::findElement(char* string) {
+int inline MyVector<char*>::findElement(char* string) {
     for (size_t i = 0; i < size; ++i) {
         if (!std::strcmp(vector[i], string)) {
             return static_cast<int>(i);
@@ -212,14 +212,14 @@ int MyVector<char*>::findElement(char* string) {
 }
 
 template<class T>
-void MyVector<T>::sort() {
+void MyVector<T>::sort(bool ascending) {
     bool sorted = false;
 
     for (size_t i = 0; i < size && !sorted; ++i) {
         sorted = true;
 
         for (size_t j = 0; j < size - i - 1; ++j) {
-            if (vector[j] > vector[j + 1]) {
+            if ((ascending)? vector[j + 1] < vector[j] : vector[j] < vector[j + 1]) {
                 std::swap(vector[j], vector[j + 1]);
                 sorted = false;
             }
@@ -228,14 +228,14 @@ void MyVector<T>::sort() {
 }
 
 template<>
-void MyVector<char*>::sort() {
+void inline MyVector<char*>::sort(bool ascending) {
     bool sorted = false;
 
     for (size_t i = 0; i < size && !sorted; ++i) {
         sorted = true;
 
         for (size_t j = 0; j < size - i - 1; ++j) {
-            if (std::strcmp(vector[j], vector[j + 1]) > 0) {
+            if ((ascending)? std::strcmp(vector[j], vector[j + 1]) > 0 : std::strcmp(vector[j], vector[j + 1]) < 0) {
                 std::swap(vector[j], vector[j + 1]);
                 sorted = false;
             }
@@ -277,7 +277,7 @@ MyVector<T>& MyVector<T>::operator=(const MyVector<T>& object) {
 }
 
 template<>
-MyVector<char*>& MyVector<char*>::operator=(const MyVector<char*>& object) {
+inline MyVector<char*>& MyVector<char*>::operator=(const MyVector<char*>& object) {
     if (vector) {
         delete[] vector;
     }
