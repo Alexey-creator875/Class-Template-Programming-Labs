@@ -11,7 +11,7 @@ class Product {
     Product(double mass, const char* material , const char* name);
     Product(const Product& object);
 
-    ~Product();
+    virtual ~Product();
 
     void setMass(double mass);
     void setMaterial(const char* material);
@@ -23,7 +23,7 @@ class Product {
 
     Product& operator=(const Product& object);
 
-    void show();
+    virtual void show() = 0;
 };
 
 class Component : public Product {
@@ -46,7 +46,7 @@ class Component : public Product {
 
     Component& operator=(const Component& object);
 
-    void show();
+    void show() override;
 };
 
 class AssemblyUnit : public Product {
@@ -67,7 +67,7 @@ class AssemblyUnit : public Product {
 
     AssemblyUnit& operator=(const AssemblyUnit& object);
 
-    void show();
+    void show() override;
 };
 
 class Mechanism : public AssemblyUnit {
@@ -91,5 +91,5 @@ class Mechanism : public AssemblyUnit {
 
     Mechanism& operator=(const Mechanism& object);
 
-    void show();
+    void show() override;
 };

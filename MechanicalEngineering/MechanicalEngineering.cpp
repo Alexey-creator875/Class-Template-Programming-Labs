@@ -105,12 +105,6 @@ const char* Product::getName() {
     return static_cast<const char*>(name);
 }
 
-void Product::show() {
-    std::cout << "Product: " << name << '\n';
-    std::cout << "Mass: " << mass << '\n';
-    std::cout << "Material: " << material << '\n';
-}
-
 Component::Component() : Product() {
     std::cout << "deffault Component()\n";
 
@@ -136,7 +130,7 @@ Component::Component(double mass, const char* material, const char* name, const 
     std::strcpy(this->GOST, GOST);
 }
 
-Component::Component(const Component& object) : Product(static_cast<Product>(object)) {
+Component::Component(const Component& object) : Product(object.mass, object.material, object.name) {
     std::cout << "copy Component()\n";
 
     standard = object.standard;
@@ -184,16 +178,17 @@ const char* Component::getGOST() {
 }
 
 void Component::show() {
-    std::cout << "Component: " << name;
-
     if (standard) {
-        std::cout << " (Standard product)\n";
+        std::cout << "Standard ";
     } else {
-        std::cout << " (Non-standard product)\n";
+        std::cout << "Non-standard ";
     }
 
+    std::cout << "Component\n";
+
+    std::cout << "Name: " << name << '\n';
     std::cout << "GOST: " << GOST << '\n';
-    std::cout << "Mass: " << mass << '\n';
+    std::cout << "Mass: " << mass << " grams\n";
     std::cout << "Material: " << material << '\n';
 }
 
@@ -238,10 +233,10 @@ int AssemblyUnit::getStructuralPartsNumber() {
 }
 
 void AssemblyUnit::show() {
-    std::cout << "Assembly unit: " << name << '\n';
+    std::cout << "Assembly unit\n";
+    std::cout << "Name: " << name << '\n';
     std::cout << "Mass: " << mass << '\n';
     std::cout << "Material: " << material << '\n';
-    std::cout << "Name: " << name << '\n';
     std::cout << "Number of structural parts: " << structuralPartsNumber << '\n';
 }
 
@@ -322,10 +317,11 @@ Mechanism& Mechanism::operator=(const Mechanism& object) {
 }
 
 void Mechanism::show() {
-    std::cout << "Mechanism: " << name << '\n';
+    std::cout << "Mechanism\n";
+    std::cout << "Name: " << name << '\n';
     std::cout << "Mass: " << mass << '\n';
     std::cout << "Material: " << material << '\n';
     std::cout << "Number of structural parts: " << structuralPartsNumber << '\n';
-    std::cout << "Price: " << price << '\n';
+    std::cout << "Price: " << price << " rubles\n";
     std::cout << "Assignment: " << assignment << '\n';
 }
