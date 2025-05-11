@@ -11,7 +11,7 @@ void Print(const MyVector<Product*>& container) {
     std::cout << "\nContainer\n";
 
     for (size_t i = 0; i < container.length(); ++i) {
-        std::cout << '\n' << i << " element:\n";
+        std::cout << '\n' << i << " element:\n\n";
         container[i]->show();
     }
 
