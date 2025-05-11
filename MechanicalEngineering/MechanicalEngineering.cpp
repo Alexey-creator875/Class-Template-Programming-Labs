@@ -9,7 +9,9 @@ const double kDeffaultMass = 0.;
 const size_t kDeffaultMaterialSize = 2;
 const size_t kDeffaultNameSize = 2;
 
-const size_t kDeffaultISOSize = 2;
+const size_t kDeffaultGOSTSize = 2;
+
+const int kDeffaultStructuralPartsNumber = 0;
 }  // namespace
 
 Product::Product() {
@@ -59,9 +61,9 @@ Product::~Product() {
 }
 
 Product& Product::operator=(const Product& object) {
-    this->setMass(object.mass);
-    this->setMaterial(object.material);
-    this->setName(object.name);
+    setMass(object.mass);
+    setMaterial(object.material);
+    setName(object.name);
 
     return *this;
 }
@@ -101,29 +103,28 @@ const char* Product::getName() {
 }
 
 void Product::show() {
-    std::cout << name << '\n';
+    std::cout << "Product: " << name << '\n';
     std::cout << "Mass: " << mass << '\n';
     std::cout << "Material: " << material << '\n';
 }
-
 
 Component::Component() : Product() {
     std::cout << "deffault Component()\n";
 
     standard = false;
-    GOST = new char[kDeffaultISOSize];
+    GOST = new char[kDeffaultGOSTSize];
     *GOST = '-';
 }
 
-Component::Component(double mass, const char* material , const char* name) : Product(mass, material, name) {
+Component::Component(double mass, const char* material, const char* name) : Product(mass, material, name) {
     std::cout << "Component()\n";
 
     standard = false;
-    GOST = new char[kDeffaultISOSize];
+    GOST = new char[kDeffaultGOSTSize];
     *GOST = '-';
 }
 
-Component::Component(double mass, const char* material , const char* name, const char* GOST) : Product(mass, material, name) {
+Component::Component(double mass, const char* material, const char* name, const char* GOST) : Product(mass, material, name) {
     std::cout << "Component()\n";
 
     standard = true;
@@ -134,7 +135,7 @@ Component::Component(double mass, const char* material , const char* name, const
 
 Component::Component(const Component& object) : Product(static_cast<Product>(object)) {
     std::cout << "copy Component()\n";
-    
+
     standard = object.standard;
 
     GOST = new char[std::strlen(object.GOST) + 1];
@@ -150,9 +151,9 @@ Component::~Component() {
 }
 
 Component& Component::operator=(const Component& object) {
-    this->setMass(object.mass);
-    this->setMaterial(object.material);
-    this->setName(object.name);
+    setMass(object.mass);
+    setMaterial(object.material);
+    setName(object.name);
 
     if (object.standard) {
         this->setGOST(object.GOST);
@@ -180,8 +181,8 @@ const char* Component::getGOST() {
 }
 
 void Component::show() {
-    std::cout << name;
-    
+    std::cout << "Component: " << name;
+
     if (standard) {
         std::cout << " (Standard product)\n";
     } else {
@@ -191,4 +192,52 @@ void Component::show() {
     std::cout << "GOST: " << GOST << '\n';
     std::cout << "Mass: " << mass << '\n';
     std::cout << "Material: " << material << '\n';
+}
+
+AssemblyUnit::AssemblyUnit() : Product(), structuralPartsNumber(kDeffaultStructuralPartsNumber) {
+    std::cout << "deffault AssemblyUnit()\n";
+}
+
+AssemblyUnit::AssemblyUnit(double mass, const char* material , const char* name)
+    : Product(mass, material, name), structuralPartsNumber(kDeffaultStructuralPartsNumber) {
+    std::cout << "AssemblyUnit()\n";
+}
+
+AssemblyUnit::AssemblyUnit(double mass, const char* material, const char* name, int structuralPartsNumber)
+    : Product(mass, material, name), structuralPartsNumber(structuralPartsNumber) {
+    std::cout << "AssemblyUnit()\n";
+}
+
+AssemblyUnit::AssemblyUnit(const AssemblyUnit& object)
+    : Product(object.mass, object.material, object.name), structuralPartsNumber(object.structuralPartsNumber) {
+    std::cout << "copy AssemblyUnit()\n";
+}
+
+AssemblyUnit::~AssemblyUnit() {
+    std::cout << "~AssemblyUnit()\n";
+}
+
+AssemblyUnit& AssemblyUnit::operator=(const AssemblyUnit& object) {
+    setMass(object.mass);
+    setMaterial(object.material);
+    setName(object.name);
+    structuralPartsNumber = object.structuralPartsNumber;
+
+    return *this;
+}
+
+void AssemblyUnit::setStructuralPartsNumber(int number) {
+    structuralPartsNumber = number;
+}
+
+int AssemblyUnit::getStructuralPartsNumber() {
+    return structuralPartsNumber;
+}
+
+void AssemblyUnit::show() {
+    std::cout << "Assembly unit: " << name << '\n';
+    std::cout << "Mass: " << mass << '\n';
+    std::cout << "Material: " << material << '\n';
+    std::cout << "Name: " << name << '\n';
+    std::cout << "Number of structural parts: " << structuralPartsNumber << '\n';
 }

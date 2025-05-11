@@ -48,3 +48,24 @@ class Component : public Product {
 
     void show();
 };
+
+class AssemblyUnit : public Product {
+ protected:
+    int structuralPartsNumber;
+
+ public:
+    AssemblyUnit();
+    AssemblyUnit(double mass, const char* material , const char* name);
+    AssemblyUnit(double mass, const char* material , const char* name, int structuralPartsNumber);
+    AssemblyUnit(const AssemblyUnit& object);
+
+    ~AssemblyUnit();
+
+    AssemblyUnit& operator=(const AssemblyUnit& object);
+
+    void setStructuralPartsNumber(int number);
+
+    int getStructuralPartsNumber();
+
+    void show();
+};
