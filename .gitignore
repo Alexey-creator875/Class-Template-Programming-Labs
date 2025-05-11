@@ -60,5 +60,8 @@
 /build
 /build-debug
 
-# Ignore debug dir
+# Ignore .vscode dir
 .vscode
+
+# Ignore test.cpp files
+test.cpp
