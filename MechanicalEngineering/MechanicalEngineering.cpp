@@ -12,6 +12,9 @@ const size_t kDeffaultNameSize = 2;
 const size_t kDeffaultGOSTSize = 2;
 
 const int kDeffaultStructuralPartsNumber = 0;
+
+const double kDeffaultPrice = 0.;
+const size_t kDeffaultAssignmentSize = 2;
 }  // namespace
 
 Product::Product() {
@@ -221,7 +224,7 @@ AssemblyUnit& AssemblyUnit::operator=(const AssemblyUnit& object) {
     setMass(object.mass);
     setMaterial(object.material);
     setName(object.name);
-    structuralPartsNumber = object.structuralPartsNumber;
+    setStructuralPartsNumber(object.structuralPartsNumber);
 
     return *this;
 }
@@ -240,4 +243,89 @@ void AssemblyUnit::show() {
     std::cout << "Material: " << material << '\n';
     std::cout << "Name: " << name << '\n';
     std::cout << "Number of structural parts: " << structuralPartsNumber << '\n';
+}
+
+Mechanism::Mechanism() : AssemblyUnit() {
+    std::cout << "deffault Mechanism()\n";
+
+    price = kDeffaultPrice;
+
+    assignment = new char[kDeffaultAssignmentSize]{};
+    *assignment = '-';
+}
+
+Mechanism::Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber) : AssemblyUnit(mass, material, name, structuralPartsNumber) {
+    std::cout << "Mechanism()\n";
+
+    price = kDeffaultPrice;
+
+    assignment = new char[kDeffaultAssignmentSize]{};
+    *assignment = '-';
+}
+
+Mechanism::Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber, double price, const char* assignment) : AssemblyUnit(mass, material, name, structuralPartsNumber) {
+    std::cout << "Mechanism()\n";
+
+    this->price = price;
+
+    this->assignment = new char[std::strlen(assignment) + 1]{};
+    std::strcpy(this->assignment, assignment);
+}
+
+Mechanism::Mechanism(const Mechanism& object) : AssemblyUnit(object.mass, object.material, object.name, object.structuralPartsNumber) {
+    std::cout << "copy Mechanism()\n";
+
+    price = object.price;
+
+    assignment = new char[std::strlen(object.assignment) + 1]{};
+    std::strcpy(assignment, object.assignment);
+}
+
+Mechanism::~Mechanism() {
+    std::cout << "~Mechanism()\n";
+
+    if (assignment) {
+        delete[] assignment;
+    }
+}
+
+void Mechanism::setPrice(double price) {
+    this->price = price;
+}
+
+void Mechanism::setAssignment(const char* assignment) {
+    if (assignment) {
+        delete[] this->assignment;
+    }
+
+    this->assignment = new char[std::strlen(assignment) + 1];
+    std::strcpy(this->assignment, assignment);
+}
+
+double Mechanism::getPrice() {
+    return price;
+}
+
+const char* Mechanism::getAssignment() {
+    return static_cast<const char*>(assignment);
+}
+
+Mechanism& Mechanism::operator=(const Mechanism& object) {
+    setMass(object.mass);
+    setMaterial(object.material);
+    setName(object.name);
+    setStructuralPartsNumber(object.structuralPartsNumber);
+    setPrice(object.price);
+    setAssignment(object.assignment);
+
+    return *this;
+}
+
+void Mechanism::show() {
+    std::cout << "Mechanism: " << name << '\n';
+    std::cout << "Mass: " << mass << '\n';
+    std::cout << "Material: " << material << '\n';
+    std::cout << "Number of structural parts: " << structuralPartsNumber << '\n';
+    std::cout << "Price: " << price << '\n';
+    std::cout << "Assignment: " << assignment << '\n';
 }

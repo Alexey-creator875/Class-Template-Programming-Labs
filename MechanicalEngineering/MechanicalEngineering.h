@@ -13,8 +13,6 @@ class Product {
 
     ~Product();
 
-    Product& operator=(const Product& object);
-
     void setMass(double mass);
     void setMaterial(const char* material);
     void setName(const char* name);
@@ -22,6 +20,8 @@ class Product {
     double getMass();
     const char* getMaterial();
     const char* getName();
+
+    Product& operator=(const Product& object);
 
     void show();
 };
@@ -39,12 +39,12 @@ class Component : public Product {
 
     ~Component();
 
-    Component& operator=(const Component& object);
-
     void setGOST(const char* GOST);
 
     bool isStandart();
     const char* getGOST();
+
+    Component& operator=(const Component& object);
 
     void show();
 };
@@ -61,11 +61,35 @@ class AssemblyUnit : public Product {
 
     ~AssemblyUnit();
 
-    AssemblyUnit& operator=(const AssemblyUnit& object);
-
     void setStructuralPartsNumber(int number);
 
     int getStructuralPartsNumber();
+
+    AssemblyUnit& operator=(const AssemblyUnit& object);
+
+    void show();
+};
+
+class Mechanism : public AssemblyUnit {
+ protected:
+    double price;
+    char* assignment;
+
+ public:
+    Mechanism();
+    Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber);
+    Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber, double price, const char* assignment);
+    Mechanism(const Mechanism& object);
+
+    ~Mechanism();
+
+    void setPrice(double price);
+    void setAssignment(const char* assignment);
+
+    double getPrice();
+    const char* getAssignment();
+
+    Mechanism& operator=(const Mechanism& object);
 
     void show();
 };
