@@ -18,8 +18,6 @@ const size_t kDeffaultAssignmentSize = 2;
 }  // namespace
 
 Product::Product() {
-    std::cout << "deffault Product()\n";
-
     mass = kDeffaultMass;
 
     material = new char[kDeffaultMaterialSize]{};
@@ -30,8 +28,6 @@ Product::Product() {
 }
 
 Product::Product(double mass, const char* material, const char* name) : mass(mass) {
-    std::cout << "Product()\n";
-
     this->material = new char[std::strlen(material) + 1];
     std::strcpy(this->material, material);
 
@@ -40,8 +36,6 @@ Product::Product(double mass, const char* material, const char* name) : mass(mas
 }
 
 Product::Product(const Product& object) {
-    std::cout << "copy Product()\n";
-
     mass = object.mass;
 
     material = new char[std::strlen(object.material) + 1];
@@ -52,8 +46,6 @@ Product::Product(const Product& object) {
 }
 
 Product::~Product() {
-    std::cout << "~Product()\n";
-
     if (material) {
         delete[] material;
     }
@@ -106,24 +98,18 @@ const char* Product::getName() {
 }
 
 Component::Component() : Product() {
-    std::cout << "deffault Component()\n";
-
     standard = false;
     GOST = new char[kDeffaultGOSTSize];
     *GOST = '-';
 }
 
 Component::Component(double mass, const char* material, const char* name) : Product(mass, material, name) {
-    std::cout << "Component()\n";
-
     standard = false;
     GOST = new char[kDeffaultGOSTSize];
     *GOST = '-';
 }
 
 Component::Component(double mass, const char* material, const char* name, const char* GOST) : Product(mass, material, name) {
-    std::cout << "Component()\n";
-
     standard = true;
 
     this->GOST = new char[std::strlen(GOST) + 1];
@@ -131,8 +117,6 @@ Component::Component(double mass, const char* material, const char* name, const 
 }
 
 Component::Component(const Component& object) : Product(object.mass, object.material, object.name) {
-    std::cout << "copy Component()\n";
-
     standard = object.standard;
 
     GOST = new char[std::strlen(object.GOST) + 1];
@@ -140,8 +124,6 @@ Component::Component(const Component& object) : Product(object.mass, object.mate
 }
 
 Component::~Component() {
-    std::cout << "~Component()\n";
-
     if (GOST) {
         delete[] GOST;
     }
@@ -185,34 +167,28 @@ void Component::show() {
     }
 
     std::cout << "Component\n";
-
-    std::cout << "Name: " << name << '\n';
-    std::cout << "GOST: " << GOST << '\n';
     std::cout << "Mass: " << mass << " grams\n";
     std::cout << "Material: " << material << '\n';
+    std::cout << "Name: " << name << '\n';
+    std::cout << "GOST: " << GOST << '\n';
 }
 
 AssemblyUnit::AssemblyUnit() : Product(), structuralPartsNumber(kDeffaultStructuralPartsNumber) {
-    std::cout << "deffault AssemblyUnit()\n";
 }
 
 AssemblyUnit::AssemblyUnit(double mass, const char* material, const char* name)
     : Product(mass, material, name), structuralPartsNumber(kDeffaultStructuralPartsNumber) {
-    std::cout << "AssemblyUnit()\n";
 }
 
 AssemblyUnit::AssemblyUnit(double mass, const char* material, const char* name, int structuralPartsNumber)
     : Product(mass, material, name), structuralPartsNumber(structuralPartsNumber) {
-    std::cout << "AssemblyUnit()\n";
 }
 
 AssemblyUnit::AssemblyUnit(const AssemblyUnit& object)
     : Product(object.mass, object.material, object.name), structuralPartsNumber(object.structuralPartsNumber) {
-    std::cout << "copy AssemblyUnit()\n";
 }
 
 AssemblyUnit::~AssemblyUnit() {
-    std::cout << "~AssemblyUnit()\n";
 }
 
 AssemblyUnit& AssemblyUnit::operator=(const AssemblyUnit& object) {
@@ -241,8 +217,6 @@ void AssemblyUnit::show() {
 }
 
 Mechanism::Mechanism() : AssemblyUnit() {
-    std::cout << "deffault Mechanism()\n";
-
     price = kDeffaultPrice;
 
     assignment = new char[kDeffaultAssignmentSize]{};
@@ -251,8 +225,6 @@ Mechanism::Mechanism() : AssemblyUnit() {
 
 Mechanism::Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber)
     : AssemblyUnit(mass, material, name, structuralPartsNumber) {
-    std::cout << "Mechanism()\n";
-
     price = kDeffaultPrice;
 
     assignment = new char[kDeffaultAssignmentSize]{};
@@ -261,8 +233,6 @@ Mechanism::Mechanism(double mass, const char* material, const char* name, int st
 
 Mechanism::Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber, double price, const char* assignment)
     : AssemblyUnit(mass, material, name, structuralPartsNumber) {
-    std::cout << "Mechanism()\n";
-
     this->price = price;
 
     this->assignment = new char[std::strlen(assignment) + 1]{};
@@ -270,8 +240,6 @@ Mechanism::Mechanism(double mass, const char* material, const char* name, int st
 }
 
 Mechanism::Mechanism(const Mechanism& object) : AssemblyUnit(object.mass, object.material, object.name, object.structuralPartsNumber) {
-    std::cout << "copy Mechanism()\n";
-
     price = object.price;
 
     assignment = new char[std::strlen(object.assignment) + 1]{};
@@ -279,8 +247,6 @@ Mechanism::Mechanism(const Mechanism& object) : AssemblyUnit(object.mass, object
 }
 
 Mechanism::~Mechanism() {
-    std::cout << "~Mechanism()\n";
-
     if (assignment) {
         delete[] assignment;
     }
