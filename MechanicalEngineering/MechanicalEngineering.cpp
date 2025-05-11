@@ -7,29 +7,43 @@
 namespace {
 const double kDeffaultMass = 0.;
 const size_t kDeffaultMaterialSize = 2;
+const size_t kDeffaultNameSize = 2;
+
+const size_t kDeffaultISOSize = 2;
 }  // namespace
 
 Product::Product() {
     std::cout << "deffault Product()\n";
 
     mass = kDeffaultMass;
+
     material = new char[kDeffaultMaterialSize]{};
     *material = '-';
+
+    name = new char[kDeffaultNameSize]{};
+    *name = '-';
 }
 
-Product::Product(double mass, const char* material) : mass(mass) {
+Product::Product(double mass, const char* material, const char* name) : mass(mass) {
     std::cout << "Product()\n";
 
     this->material = new char[std::strlen(material) + 1];
     std::strcpy(this->material, material);
+
+    this->name = new char[std::strlen(name) + 1];
+    std::strcpy(this->name, name);
 }
 
 Product::Product(const Product& object) {
     std::cout << "copy Product()\n";
 
     mass = object.mass;
+
     material = new char[std::strlen(object.material) + 1];
     std::strcpy(material, object.material);
+
+    name = new char[std::strlen(object.name) + 1];
+    std::strcpy(name, object.name);
 }
 
 Product::~Product() {
@@ -38,17 +52,16 @@ Product::~Product() {
     if (material) {
         delete[] material;
     }
+
+    if (name) {
+        delete[] name;
+    }
 }
 
 Product& Product::operator=(const Product& object) {
-    mass = object.mass;
-
-    if (material) {
-        delete[] material;
-    }
-
-    material = new char[std::strlen(object.material) + 1];
-    std::strcpy(material, object.material);
+    this->setMass(object.mass);
+    this->setMaterial(object.material);
+    this->setName(object.name);
 
     return *this;
 }
@@ -66,6 +79,15 @@ void Product::setMaterial(const char* material) {
     std::strcpy(this->material, material);
 }
 
+void Product::setName(const char* name) {
+    if (this->name) {
+        delete[] this->name;
+    }
+
+    this->name = new char[std::strlen(name) + 1];
+    std::strcpy(this->name, name);
+}
+
 double Product::getMass() {
     return mass;
 }
@@ -74,7 +96,99 @@ const char* Product::getMaterial() {
     return static_cast<const char*>(material);
 }
 
+const char* Product::getName() {
+    return static_cast<const char*>(name);
+}
+
 void Product::show() {
+    std::cout << name << '\n';
+    std::cout << "Mass: " << mass << '\n';
+    std::cout << "Material: " << material << '\n';
+}
+
+
+Component::Component() : Product() {
+    std::cout << "deffault Component()\n";
+
+    standard = false;
+    GOST = new char[kDeffaultISOSize];
+    *GOST = '-';
+}
+
+Component::Component(double mass, const char* material , const char* name) : Product(mass, material, name) {
+    std::cout << "Component()\n";
+
+    standard = false;
+    GOST = new char[kDeffaultISOSize];
+    *GOST = '-';
+}
+
+Component::Component(double mass, const char* material , const char* name, const char* GOST) : Product(mass, material, name) {
+    std::cout << "Component()\n";
+
+    standard = true;
+
+    this->GOST = new char[std::strlen(GOST) + 1];
+    std::strcpy(this->GOST, GOST);
+}
+
+Component::Component(const Component& object) : Product(static_cast<Product>(object)) {
+    std::cout << "copy Component()\n";
+    
+    standard = object.standard;
+
+    GOST = new char[std::strlen(object.GOST) + 1];
+    std::strcpy(GOST, object.GOST);
+}
+
+Component::~Component() {
+    std::cout << "~Component()\n";
+
+    if (GOST) {
+        delete[] GOST;
+    }
+}
+
+Component& Component::operator=(const Component& object) {
+    this->setMass(object.mass);
+    this->setMaterial(object.material);
+    this->setName(object.name);
+
+    if (object.standard) {
+        this->setGOST(object.GOST);
+    }
+    return *this;
+}
+
+void Component::setGOST(const char* GOST) {
+    standard = true;
+
+    if (this->GOST) {
+        delete[] this->GOST;
+    }
+
+    this->GOST = new char[std::strlen(GOST) + 1];
+    std::strcpy(this->GOST, GOST);
+}
+
+bool Component::isStandart() {
+    return standard;
+}
+
+const char* Component::getGOST() {
+    return static_cast<const char*>(GOST);
+}
+
+void Component::show() {
+    std::cout << name;
+    
+    if (standard) {
+        std::cout << " (Standard product)\n";
+    } else {
+        std::cout << " (Non-standard product)\n";
+    }
+
+    std::cout << "GOST: " << GOST << '\n';
     std::cout << "Mass: " << mass << '\n';
     std::cout << "Material: " << material << '\n';
 }
