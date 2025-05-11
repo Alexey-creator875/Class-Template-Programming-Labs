@@ -8,7 +8,7 @@ class Product {
 
  public:
     Product();
-    Product(double mass, const char* material , const char* name);
+    Product(double mass, const char* material, const char* name);
     Product(const Product& object);
 
     virtual ~Product();
@@ -30,11 +30,11 @@ class Component : public Product {
  protected:
     bool standard;
     char* GOST;
- 
+
  public:
     Component();
-    Component(double mass, const char* material , const char* name);
-    Component(double mass, const char* material , const char* name, const char* GOST);
+    Component(double mass, const char* material, const char* name);
+    Component(double mass, const char* material, const char* name, const char* GOST);
     Component(const Component& object);
 
     ~Component();
@@ -55,8 +55,8 @@ class AssemblyUnit : public Product {
 
  public:
     AssemblyUnit();
-    AssemblyUnit(double mass, const char* material , const char* name);
-    AssemblyUnit(double mass, const char* material , const char* name, int structuralPartsNumber);
+    AssemblyUnit(double mass, const char* material, const char* name);
+    AssemblyUnit(double mass, const char* material, const char* name, int structuralPartsNumber);
     AssemblyUnit(const AssemblyUnit& object);
 
     ~AssemblyUnit();
@@ -77,8 +77,8 @@ class Mechanism : public AssemblyUnit {
 
  public:
     Mechanism();
-    Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber);
-    Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber, double price, const char* assignment);
+    Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber);
+    Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber, double price, const char* assignment);
     Mechanism(const Mechanism& object);
 
     ~Mechanism();

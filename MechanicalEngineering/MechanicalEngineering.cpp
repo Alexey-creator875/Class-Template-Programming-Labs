@@ -196,7 +196,7 @@ AssemblyUnit::AssemblyUnit() : Product(), structuralPartsNumber(kDeffaultStructu
     std::cout << "deffault AssemblyUnit()\n";
 }
 
-AssemblyUnit::AssemblyUnit(double mass, const char* material , const char* name)
+AssemblyUnit::AssemblyUnit(double mass, const char* material, const char* name)
     : Product(mass, material, name), structuralPartsNumber(kDeffaultStructuralPartsNumber) {
     std::cout << "AssemblyUnit()\n";
 }
@@ -249,7 +249,8 @@ Mechanism::Mechanism() : AssemblyUnit() {
     *assignment = '-';
 }
 
-Mechanism::Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber) : AssemblyUnit(mass, material, name, structuralPartsNumber) {
+Mechanism::Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber)
+    : AssemblyUnit(mass, material, name, structuralPartsNumber) {
     std::cout << "Mechanism()\n";
 
     price = kDeffaultPrice;
@@ -258,7 +259,8 @@ Mechanism::Mechanism(double mass, const char* material , const char* name, int s
     *assignment = '-';
 }
 
-Mechanism::Mechanism(double mass, const char* material , const char* name, int structuralPartsNumber, double price, const char* assignment) : AssemblyUnit(mass, material, name, structuralPartsNumber) {
+Mechanism::Mechanism(double mass, const char* material, const char* name, int structuralPartsNumber, double price, const char* assignment)
+    : AssemblyUnit(mass, material, name, structuralPartsNumber) {
     std::cout << "Mechanism()\n";
 
     this->price = price;

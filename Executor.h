@@ -1,12 +1,12 @@
 #pragma once
 
-#include "MyVector/MyVector.h"
 #include "MechanicalEngineering/MechanicalEngineering.h"
+#include "MyVector/MyVector.h"
 
 namespace Executor {
 void Print(const MyVector<Product*>& container);
-void Remove();
-void Clear();
+void Remove(MyVector<Product*>& container, int index);
+void Clear(MyVector<Product*>& container);
 
 void RunApplication();
 }  // namespace Executor

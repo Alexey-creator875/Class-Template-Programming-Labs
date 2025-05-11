@@ -1,6 +1,14 @@
+#include <iostream>
+#include <stdexcept>
+
 #include "Executor.h"
 
 int main(int, char**) {
-    Executor::RunApplication();
+    try {
+        Executor::RunApplication();
+    } catch (const std::exception& e) {
+        std::cout << e.what() << '\n';
+    }
+
     return 0;
 }
