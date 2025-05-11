@@ -22,7 +22,6 @@ set(SOURCE_LIST
 add_executable(${project}
         ${SOURCE_LIST})
 
-
 target_link_libraries(${project} MyVector)
 target_link_libraries(${project} MechanicalEngineering)
 
