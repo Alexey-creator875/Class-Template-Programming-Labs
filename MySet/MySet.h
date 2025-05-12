@@ -57,49 +57,19 @@ int MySet<T>::findElement(const T element) const {
     while ((rightBoundary - leftBoundary) > 1) {
         size_t middle = (leftBoundary + rightBoundary) / kHalfDivisor;
 
-        if ((*this)[middle] > element) {
+        if (Compare((*this)[middle], element) > 0) {
             rightBoundary = middle;
         } else {
             leftBoundary = middle;
         }
     }
 
-    if ((*this)[leftBoundary] == element) {
+    if (!Compare((*this)[leftBoundary], element)) {
         return static_cast<int>(leftBoundary);
     }
 
-    if ((*this)[rightBoundary] == element) {
-        return static_cast<int>(rightBoundary);
-    }
-
-    return -1;
-}
-
-template<>
-int MySet<char*>::findElement(char* string) const {
-    if (this->size == 0) {
-        return -1;
-    }
-
-    size_t leftBoundary = 0;
-    size_t rightBoundary = this->size - 1;
-
-    while ((rightBoundary - leftBoundary) > 1) {
-        size_t middle = (leftBoundary + rightBoundary) / kHalfDivisor;
-
-        if (std::strcmp((*this)[middle], string) > 0) {
-            rightBoundary = middle;
-        } else {
-            leftBoundary = middle;
-        }
-    }
-
-    if (!std::strcmp((*this)[leftBoundary], string)) {
+    if (!Compare((*this)[rightBoundary], element)) {
         return static_cast<int>(leftBoundary);
-    }
-
-    if (!std::strcmp((*this)[rightBoundary], string)) {
-        return static_cast<int>(rightBoundary);
     }
 
     return -1;
@@ -206,22 +176,7 @@ bool operator==(const MySet<F>& first, const MySet<F>& second) {
     }
 
     for (size_t i = 0; i < first.size; ++i) {
-        if (!(first[i] == second[i])) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-template<>
-bool operator==(const MySet<char*>& first, const MySet<char*>& second) {
-    if (first.size != second.size) {
-        return false;
-    }
-
-    for (size_t i = 0; i < first.size; ++i) {
-        if (std::strcmp(first[i], second[i])) {
+        if (Compare(first[i], second[i])) {
             return false;
         }
     }
