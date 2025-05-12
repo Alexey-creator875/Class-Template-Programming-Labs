@@ -19,8 +19,8 @@ MyVector<char*>::~MyVector() {
 template<>
 void MyVector<char*>::pushBack(char* string) {
     if (size >= capacity) {
-            resize();
-        }
+        resize();
+    }
 
     if (vector[size]) {
         delete[] vector[size];

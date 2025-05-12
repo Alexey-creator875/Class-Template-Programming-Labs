@@ -2,9 +2,9 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <cstring>
 #include <iostream>
 #include <stdexcept>
-#include <cstring>
 
 namespace {
 const size_t kDefaultVectorCapacity = 8;
@@ -156,7 +156,7 @@ void MyVector<T>::sort(bool ascending) {
         sorted = true;
 
         for (size_t j = 0; j < size - i - 1; ++j) {
-            if (ascending? Compare(vector[j], vector[j + 1]) > 0 : Compare(vector[j], vector[j + 1]) < 0) {
+            if (ascending ? Compare(vector[j], vector[j + 1]) > 0 : Compare(vector[j], vector[j + 1]) < 0) {
                 std::swap(vector[j], vector[j + 1]);
                 sorted = false;
             }
@@ -200,7 +200,7 @@ MyVector<T>& MyVector<T>::operator=(const MyVector<T>& object) {
 }
 
 template<class F>
-std::ostream& operator<<(std::ostream& out, const MyVector<F>& object)  {
+std::ostream& operator<<(std::ostream& out, const MyVector<F>& object) {
     for (size_t i = 0; i < object.size; ++i) {
         out << object[i] << ' ';
     }
