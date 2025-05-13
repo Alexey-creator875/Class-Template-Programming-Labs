@@ -49,7 +49,7 @@ void RunApplication() {
 
     std::cout << '\n';
 
-    MyVector<char*> v("Hello!");
+    MyVector<const char*> v("Hello!");
     v.pushBack("Привет!");
     v.pushBack("Привет!");
     v.pushBack("Привет!");
@@ -60,15 +60,15 @@ void RunApplication() {
     v.pushBack("Привет!");
     v.pushBack("Привет!");
     std::cout << "Вектор v: " << v << std::endl;
-    MyVector<char*> v1 = v;
+    MyVector<const char*> v1 = v;
     std::cout << "Вектор v1: " << v1 << std::endl;
     for (int i = 0; i < v1.length(); i++)
         v1.deleteElement(0);
     std::cout << "Вектор v1: " << v1 << std::endl;
-    MySet<char*> s("Yes"), s1, s2;
+    MySet<const char*> s("Yes"), s1, s2;
     s.append("Привет!");
     s.append("No");
-    char *str = "Hello!";
+    const char *str = "Hello!";
     s.append(str);
     std::cout << "Множество s: " << s << std::endl;
     s1.append("Cat");
@@ -91,7 +91,7 @@ void RunApplication() {
     std::cout << "Множество s2=s1*s: " << s2 << std::endl;
     std::cout << "Множество s1: " << s1 << std::endl;
     std::cout << "Множество s: " << s << std::endl;
-    MySet<char*> s3 = s2;
+    MySet<const char*> s3 = s2;
     std::cout << "Множество s3=s2: " << s3 << std::endl;
     if (s3 == s2)
         std::cout << "Множество s3=s2\n";

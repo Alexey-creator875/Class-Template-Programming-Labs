@@ -6,10 +6,10 @@ project(${project})
 set(CMAKE_CXX_STANDARD 20)
 
 set(SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/MyVector.cpp)
+        MyVector.cpp)
 
 set(HEADERS
-        ${CMAKE_CURRENT_SOURCE_DIR}/MyVector.h)
+        MyVector.h)
 
 set(SOURCE_LIST
         ${SOURCES}

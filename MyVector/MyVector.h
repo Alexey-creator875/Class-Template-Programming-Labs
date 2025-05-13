@@ -25,6 +25,11 @@ int Compare(const T first, const T second) {
     return 1;
 }
 
+template<>
+int inline Compare(const char* first, const char* second) {
+    return std::strcmp(first, second);
+}
+
 template<class T>
 class MyVector {
  protected:
@@ -38,7 +43,7 @@ class MyVector {
  public:
     MyVector();
     MyVector(const T element);
-    MyVector(const MyVector& object);
+    MyVector(const MyVector<T>& object);
 
     ~MyVector();
 
@@ -51,7 +56,7 @@ class MyVector {
 
     T operator[](int index) const;
     T& operator[](const int index);
-    MyVector& operator=(const MyVector& object);
+    MyVector<T>& operator=(const MyVector<T>& object);
 
     template<class F>
     friend std::ostream& operator<<(std::ostream& out, const MyVector<F>& object);
@@ -106,6 +111,17 @@ MyVector<T>::~MyVector() {
     delete[] vector;
 }
 
+template<>
+inline MyVector<char*>::~MyVector() {
+    for (size_t i = 0; i < capacity; ++i) {
+        if (vector[i]) {
+            delete[] vector[i];
+        }
+    }
+
+    delete[] vector;
+}
+
 template<class T>
 int MyVector<T>::length() {
     return static_cast<int>(size);
@@ -120,6 +136,21 @@ void MyVector<T>::pushBack(const T element) {
     vector[size++] = element;
 }
 
+template<>
+void inline MyVector<char*>::pushBack(char* string) {
+    if (size >= capacity) {
+        resize();
+    }
+
+    if (vector[size]) {
+        delete[] vector[size];
+    }
+
+    vector[size] = new char[std::strlen(string) + 1];
+
+    std::strcpy(vector[size++], string);
+}
+
 template<class T>
 void MyVector<T>::deleteElement(const int index) {
     if (index < 0 || index >= size) {
@@ -130,6 +161,25 @@ void MyVector<T>::deleteElement(const int index) {
 
     for (size_t i = static_cast<size_t>(index); i < size; ++i) {
         vector[i] = vector[i + 1];
+    }
+
+    if (capacity > kDefaultVectorCapacity && size < (capacity / kReductionFactor)) {
+        resize();
+    }
+}
+
+template<>
+void inline MyVector<char*>::deleteElement(const int index) {
+    if (index < 0 || index >= size) {
+        throw std::runtime_error("index out of boundary");
+    }
+
+    --size;
+
+    for (size_t i = static_cast<size_t>(index); i < size; ++i) {
+        delete[] vector[i];
+        vector[i] = new char[std::strlen(vector[i + 1]) + 1];
+        std::strcpy(vector[i], vector[i + 1]);
     }
 
     if (capacity > kDefaultVectorCapacity && size < (capacity / kReductionFactor)) {
