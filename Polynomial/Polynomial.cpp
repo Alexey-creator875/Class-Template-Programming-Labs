@@ -15,7 +15,7 @@ const int kTermDegreeNotRequiredExplicitIndication = 1;
 const int kDeffaultPolynomialDegree = 0;
 
 const int kTermBufferSize = 20;
-const int kPolynomialBufferSize = 50;
+const int kPolynomialBufferSize = 100;
 
 char* FindNewTermStart(char* string) {
     char* plus = std::strchr(string, '+');
@@ -264,6 +264,16 @@ Polynomial& Polynomial::operator*=(const Polynomial& object) {
 Polynomial operator+(const Polynomial& first, const Polynomial& second) {
     Polynomial newPolinomial = first;
     newPolinomial += second;
+
+    return newPolinomial;
+}
+
+Polynomial operator-(const Polynomial& first, const Polynomial& second) {
+    Polynomial secondBuffer = second;
+    secondBuffer *= Term(-1, 0);
+
+    Polynomial newPolinomial = first;
+    newPolinomial += secondBuffer;
 
     return newPolinomial;
 }

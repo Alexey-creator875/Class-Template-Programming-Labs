@@ -54,6 +54,7 @@ class Polynomial {
     Polynomial& operator*=(const Polynomial& object);
 
     friend Polynomial operator+(const Polynomial& first, const Polynomial& second);
+    friend Polynomial operator-(const Polynomial& first, const Polynomial& second);
     friend Polynomial operator*(const Polynomial& first, const Polynomial& second);
 
     friend std::ostream& operator<<(std::ostream& out, const Polynomial& object);

@@ -51,18 +51,20 @@ void RunApplication() {
     p4.changeOrder();
 
     Polynomial p5;
-    p5 += Term(1, 1);
-    p5 += Term(3, 0);
+    
+    std::cout << "Enter p5:\n";
+    std::cin >> p5;
 
     std::cout << "p5: " << p5 << '\n';
 
     Polynomial p6;
-    p6 += Term(1, 1);
-    p6 += Term(-2, 0);
+    std::cout << "Enter p5:\n";
+    std::cin >> p6;
 
     std::cout << "p6: " << p6 << '\n';
 
     std::cout << "p5 + p6 = " << (p5 + p6) << '\n';
+    std::cout << "p5 - p6 = " << (p5 - p6) << '\n';
     std::cout << "p5 * p6 = " << (p5 * p6) << '\n';
 
     p5 += p6;
