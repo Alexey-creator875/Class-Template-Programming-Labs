@@ -16,3 +16,5 @@ set(SOURCE_LIST
         ${HEADERS})
 
 add_library(${project} STATIC ${SOURCE_LIST})
+
+target_link_libraries(${project} MyVector)
