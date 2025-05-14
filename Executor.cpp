@@ -51,16 +51,14 @@ void RunApplication() {
     p4.changeOrder();
 
     Polynomial p5;
-    
     std::cout << "Enter p5:\n";
     std::cin >> p5;
 
-    std::cout << "p5: " << p5 << '\n';
-
     Polynomial p6;
-    std::cout << "Enter p5:\n";
+    std::cout << "Enter p6:\n";
     std::cin >> p6;
 
+    std::cout << "p5: " << p5 << '\n';
     std::cout << "p6: " << p6 << '\n';
 
     std::cout << "p5 + p6 = " << (p5 + p6) << '\n';
@@ -72,12 +70,5 @@ void RunApplication() {
 
     p5 *= p6;
     std::cout << "p5 *= p6; p5: " << p5 << '\n';
-
-    Polynomial p7;
-
-    std::cout << "Enter your own polynomial:\n";
-    std::cin >> p7;
-
-    std::cout << "Your polynomial:\n" << p7 << '\n';
 }
 }  // namespace Executor

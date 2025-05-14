@@ -14,26 +14,51 @@ const int kTermDegreeNotRequiredExplicitIndication = 1;
 
 const int kDeffaultPolynomialDegree = 0;
 
-const int kTermBufferSize = 20;
+const int kTermBufferSize = 50;
 const int kPolynomialBufferSize = 100;
 
 char* FindNewTermStart(char* string) {
-    char* plus = std::strchr(string, '+');
-    char* minus = std::strchr(string, '-');
-
-    if (plus && minus) {
-        return (plus < minus)? plus : minus;
+    if (!string) {
+        throw std::runtime_error("invalid string");
     }
 
-    if (plus) {
-        return plus;
+    if (*string == '\0') {
+        return string;
     }
 
-    if (minus) {
-        return minus;
+    size_t i = 0;
+    bool ignoreSigns = false;
+
+    while (string[i] != '\0' && ((string[i] != '+') && (string[i] != '-') || ignoreSigns)) {
+        if (string[i] == '^') {
+            ignoreSigns = true;
+        }
+
+        if (std::isdigit(string[i])) {
+            ignoreSigns = false;
+        }
+
+        ++i;
     }
 
-    return std::strchr(string, '\0');
+    return string + i;
+
+    // char* plus = std::strchr(string, '+');
+    // char* minus = std::strchr(string, '-');
+
+    // if (plus && minus) {
+    //     return (plus < minus)? plus : minus;
+    // }
+
+    // if (plus) {
+    //     return plus;
+    // }
+
+    // if (minus) {
+    //     return minus;
+    // }
+
+    // return std::strchr(string, '\0');
     
 }
 
@@ -113,32 +138,34 @@ bool operator<(const Term& first, const Term& second) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Term& object) {
-    if (object.coefficient == kDeffaultTermCoefficient) {
-        out << '0';
+    if (object.degree == kDeffaultTermDegree) {
+        out << object.coefficient;
         return out;
     }
 
-    if ((std::abs(object.coefficient) != kTermAbsoluteCoefficientNotRequiredExplicitIndication) || (object.degree == kDeffaultTermDegree)) {
-        out << object.coefficient;
-    }
-
-    switch (object.degree) {
-        case kDeffaultTermDegree:
-            break;
-        case kTermDegreeNotRequiredExplicitIndication:
+    switch (object.coefficient) {
+        case kTermAbsoluteCoefficientNotRequiredExplicitIndication:
             out << 'x';
             break;
-        default:
-            out << "x^" << object.degree;
+        case -kTermAbsoluteCoefficientNotRequiredExplicitIndication:
+            out << "-x";
             break;
+        default:
+            out << object.coefficient << 'x';
     }
 
+    if (object.degree == kTermDegreeNotRequiredExplicitIndication) {
+        return out;
+    }
+
+    out << '^' << object.degree;
     return out;
 }
 
 std::istream& operator>>(std::istream& in, Term& object) {
     char buffer[kTermBufferSize];
     in.getline(buffer, kTermBufferSize, '\n');
+    removeSpaces(buffer);
 
     object = CreateTermBasedOnString(buffer);
 
@@ -156,6 +183,12 @@ Polynomial::Polynomial(int number) {
 }
 
 Polynomial::Polynomial(const Term& term) {
+    if (term.coefficient == 0) {
+        poly.pushBack(Term());
+        degree = kDeffaultPolynomialDegree;
+        return;
+    }
+
     poly.pushBack(term);
     degree = term.degree;
 }
@@ -174,10 +207,53 @@ void Polynomial::changeOrder() {
 }
 
 Polynomial& Polynomial::operator+=(const Term& object) {
+    if (object.coefficient == 0) {
+        return *this;
+    }
+
+    if (poly.length() == 1) {
+        if (poly[0].coefficient == 0) {
+            degree = object.degree;
+            poly[0].coefficient = object.coefficient;
+            poly[0].degree = object.degree;
+            return *this;
+        }
+
+        if (object.degree != poly[0].degree) {
+            poly.pushBack(object);
+            poly.sort(order);
+            degree = (object.degree > degree)? object.degree : degree;
+            return *this;
+        }
+
+        if ((object.coefficient + poly[0].coefficient) != 0) {
+            poly[0].coefficient += object.coefficient;
+            return *this;
+        }
+
+        poly[0].coefficient = kDeffaultTermCoefficient;
+        poly[0].degree = kDeffaultTermDegree;
+        degree = kDeffaultPolynomialDegree;
+        return *this;
+    }
+
     if (object.degree > degree) {
         poly.pushBack(object);
-        degree = object.degree;
         poly.sort(order);
+        degree = object.degree;
+        return *this;
+    }
+
+    if (object.degree == degree) {
+        int sameDegreeTermIndex = (order)? poly.length() - 1 : 0;
+
+        if ((poly[sameDegreeTermIndex].coefficient + object.coefficient) != 0) {
+            poly[sameDegreeTermIndex].coefficient += object.coefficient;
+            return *this;
+        }
+
+        poly.deleteElement(sameDegreeTermIndex);
+        degree = poly[(order)? sameDegreeTermIndex - 1 : sameDegreeTermIndex].degree;
         return *this;
     }
 
@@ -191,7 +267,6 @@ Polynomial& Polynomial::operator+=(const Term& object) {
             (order)? left = middle : right = middle;
         } else {
             (order)? right = middle : left = middle;
-
         }
     }
 
@@ -201,31 +276,21 @@ Polynomial& Polynomial::operator+=(const Term& object) {
         return *this;
     }
 
-    int index = 0;
+    int sameDegreeTermIndex = (poly[left].degree == object.degree)? left : right;
 
-    if (poly[left].degree == object.degree) {
-        index = left;
-    } else if (poly[right].degree == object.degree) {
-        index = right;
-    }
-
-    if (poly[index].coefficient == -object.coefficient) {
-        poly.deleteElement(index);
+    if ((poly[sameDegreeTermIndex].coefficient + object.coefficient) != 0) {
+        poly[sameDegreeTermIndex].coefficient += object.coefficient;
         return *this;
     }
 
-    poly[index].coefficient += object.coefficient;
+    poly.deleteElement(sameDegreeTermIndex);
     return *this;
 }
 
 Polynomial& Polynomial::operator+=(const Polynomial& object) {
-    Polynomial newPolynomial = *this;
-
     for (size_t i = 0; i < object.poly.length(); ++i) {
-        newPolynomial += object.poly[i];
+        *this += object.poly[i];
     }
-
-    *this = newPolynomial;
 
     return *this;
 }
@@ -269,13 +334,11 @@ Polynomial operator+(const Polynomial& first, const Polynomial& second) {
 }
 
 Polynomial operator-(const Polynomial& first, const Polynomial& second) {
-    Polynomial secondBuffer = second;
-    secondBuffer *= Term(-1, 0);
+    Polynomial temporaryPolynomial = second;
+    temporaryPolynomial *= Term(-1, 0);
+    temporaryPolynomial += first;
 
-    Polynomial newPolinomial = first;
-    newPolinomial += secondBuffer;
-
-    return newPolinomial;
+    return temporaryPolynomial;
 }
 
 Polynomial operator*(const Polynomial& first, const Polynomial& second) {
@@ -321,14 +384,11 @@ std::istream& operator>>(std::istream& in, Polynomial& object) {
     while (*currentTermStart != '\0') {
         char* nextTermStart = FindNewTermStart(currentTermStart + 1);
 
-        char currentTerm[kTermBufferSize]{};
-        std::copy(currentTermStart, nextTermStart, currentTerm);
+        char currentTermString[kTermBufferSize]{};
+        std::copy(currentTermStart, nextTermStart, currentTermString);
+        removeSpaces(currentTermString);
 
-        removeSpaces(currentTerm);
-
-        Term term = CreateTermBasedOnString(currentTerm);
-
-        object += term;
+        object += CreateTermBasedOnString(currentTermString);
 
         currentTermStart = nextTermStart;
     }    
