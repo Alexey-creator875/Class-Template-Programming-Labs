@@ -12,7 +12,7 @@ set(SOURCES
 set(HEADERS
         ${CMAKE_CURRENT_SOURCE_DIR}/Executor.h)
 
-add_subdirectory(MyVector)
+add_subdirectory(MyStack)
 add_subdirectory(MechanicalEngineering)
 
 set(SOURCE_LIST
@@ -22,7 +22,7 @@ set(SOURCE_LIST
 add_executable(${project}
         ${SOURCE_LIST})
 
-target_link_libraries(${project} MyVector)
+target_link_libraries(${project} MyStack)
 target_link_libraries(${project} MechanicalEngineering)
 
 if(ENABLE_DEBUG)

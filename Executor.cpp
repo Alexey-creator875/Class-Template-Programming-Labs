@@ -5,12 +5,12 @@
 #include <stdexcept>
 
 #include "MechanicalEngineering/MechanicalEngineering.h"
-#include "MyVector/MyVector.h"
+#include "MyStack/MyStack.h"
 
 namespace {
 const size_t kBufferSize = 40;
 
-void AddComponentToConteiner(MyVector<Product*>& container) {
+void AddComponentToConteiner(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -34,14 +34,14 @@ void AddComponentToConteiner(MyVector<Product*>& container) {
         std::cin.getline(GOST, kBufferSize, '\n');
         std::cin.getline(GOST, kBufferSize, '\n');
 
-        container.pushBack(new Component(mass, material, name, GOST));
+        container.push(new Component(mass, material, name, GOST));
         return;
     }
 
-    container.pushBack(new Component(mass, material, name));
+    container.push(new Component(mass, material, name));
 }
 
-void AddAssemblyUnitToConteiner(MyVector<Product*>& container) {
+void AddAssemblyUnitToConteiner(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -59,10 +59,10 @@ void AddAssemblyUnitToConteiner(MyVector<Product*>& container) {
     std::cout << "Enter number of structural parts:\n";
     std::cin >> structuralPartsNumber;
 
-    container.pushBack(new AssemblyUnit(mass, material, name, structuralPartsNumber));
+    container.push(new AssemblyUnit(mass, material, name, structuralPartsNumber));
 }
 
-void AddMechanismToConteiner(MyVector<Product*>& container) {
+void AddMechanismToConteiner(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -89,55 +89,71 @@ void AddMechanismToConteiner(MyVector<Product*>& container) {
     std::cin.getline(assignment, kBufferSize, '\n');
     std::cin.getline(assignment, kBufferSize, '\n');
 
-    container.pushBack(new Mechanism(mass, material, name, structuralPartsNumber, price, assignment));
+    container.push(new Mechanism(mass, material, name, structuralPartsNumber, price, assignment));
 }
 }  // namespace
 
 namespace Executor {
-void Print(const MyVector<Product*>& container) {
-    if (container.length() == 0) {
+void Print(const MyStack<Product*>& container) {
+    if (container.empty()) {
         std::cout << "\nContainer is empty\n\n";
         return;
     }
 
     std::cout << "\nContainer";
 
-    for (size_t i = 0; i < container.length(); ++i) {
-        std::cout << '\n' << i << " element:\n\n";
-        container[i]->show();
+    ListNode<Product*, MyStack<Product*>>* temp = container.getTop();
+
+    size_t count = 0;
+
+    while (temp) {
+        std::cout << '\n' << count << " element:\n\n";
+        temp->getData()->show();
+        temp = temp->getNext();
+        ++count;
     }
 
     std::cout << '\n';
 }
 
-bool Remove(MyVector<Product*>& container, int index) {
-    if ((index < 0) || (index >= container.length())) {
-        return false;
+bool Remove(MyStack<Product*>& container, int index) {
+
+    ListNode<Product*, MyStack<Product*>>* currentNode = container.getTop();
+    ListNode<Product*, MyStack<Product*>>* previousNode = nullptr;
+
+    size_t stackIndex = 0;
+
+    while (currentNode && stackIndex < index) {
+        previousNode = currentNode;
+        currentNode = currentNode->getNext();
+        ++stackIndex;
     }
 
-    delete container[index];
-    container.deleteElement(index);
+    previousNode->setNext(currentNode->getNext());
+
+    if(currentNode->getData()) {
+        delete currentNode->getData();
+    }
+    
+    if (currentNode) {
+        delete currentNode;
+    }
 
     return true;
 }
 
-void Clear(MyVector<Product*>& container) {
-    if (container.length() == 0) {
+void Clear(MyStack<Product*>& container) {
+    if (container.empty()) {
         return;
     }
 
-    for (size_t i = 0; i < container.length(); ++i) {
-        delete container[static_cast<int>(i)];
-    }
-
-    int containerSize = container.length();
-
-    for (int i = containerSize - 1; i >= 0; --i) {
-        container.deleteElement(i);
+    while (!container.empty()) {
+        delete container.getTop()->getData();
+        container.pop();
     }
 }
 
-void AddProductToContainer(MyVector<Product*>& container) {
+void AddProductToContainer(MyStack<Product*>& container) {
     int productType = 0;
 
     std::cout << '\n'
@@ -160,15 +176,10 @@ void AddProductToContainer(MyVector<Product*>& container) {
     }
 }
 
-void RemoveProductFromContainer(MyVector<Product*>& container) {
+void RemoveProductFromContainer(MyStack<Product*>& container) {
     int index = 0;
     std::cout << "Enter index of product:\n";
     std::cin >> index;
-
-    if ((index < 0) || (index >= container.length())) {
-        std::cout << "invalid index\n";
-        return;
-    }
 
     if (!Remove(container, index)) {
         std::cout << "Failed to delete product";
@@ -178,13 +189,13 @@ void RemoveProductFromContainer(MyVector<Product*>& container) {
     std::cout << "\nElement is deleted sucessfully!\n";
 }
 
-void ClearContainer(MyVector<Product*>& container) {
+void ClearContainer(MyStack<Product*>& container) {
     Clear(container);
     std::cout << "\nContainer is cleared sucessfully!\n";
 }
 
 void RunApplication() {
-    MyVector<Product*> container;
+    MyStack<Product*> container;
 
     bool continueExecution = true;
 
