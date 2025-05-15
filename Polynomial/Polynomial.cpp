@@ -42,24 +42,6 @@ char* FindNewTermStart(char* string) {
     }
 
     return string + i;
-
-    // char* plus = std::strchr(string, '+');
-    // char* minus = std::strchr(string, '-');
-
-    // if (plus && minus) {
-    //     return (plus < minus)? plus : minus;
-    // }
-
-    // if (plus) {
-    //     return plus;
-    // }
-
-    // if (minus) {
-    //     return minus;
-    // }
-
-    // return std::strchr(string, '\0');
-    
 }
 
 Term CreateTermBasedOnString(char* string) {
@@ -91,7 +73,7 @@ void removeSpaces(char* string) {
 
     size_t newStringIndex = 0;
     
-    for (size_t i = 0; i < kTermBufferSize && string[i]; ++i) {
+    for (size_t i = 0; i < kPolynomialBufferSize && string[i]; ++i) {
         if (string[i] != ' ') {
             newString[newStringIndex] = string[i];
             ++newStringIndex;
@@ -125,7 +107,7 @@ Term operator+(const Term& first, const Term& second) {
     return Term(first.coefficient + second.coefficient, first.degree);
 }
 
-[[maybe_unused]] Term operator*(const Term& first, const Term& second) {
+Term operator*(const Term& first, const Term& second) {
     return Term(first.coefficient * second.coefficient, first.degree + second.degree);
 }
 
@@ -374,21 +356,19 @@ std::istream& operator>>(std::istream& in, Polynomial& object) {
 
     char buffer[kPolynomialBufferSize]{};
     in.getline(buffer, kPolynomialBufferSize, '\n');
+    removeSpaces(buffer);
 
     char* currentTermStart = buffer;
-
-    while (*currentTermStart == ' ') {
-        ++currentTermStart;
-    }
 
     while (*currentTermStart != '\0') {
         char* nextTermStart = FindNewTermStart(currentTermStart + 1);
 
         char currentTermString[kTermBufferSize]{};
         std::copy(currentTermStart, nextTermStart, currentTermString);
-        removeSpaces(currentTermString);
 
-        object += CreateTermBasedOnString(currentTermString);
+        Term term = CreateTermBasedOnString(currentTermString);
+
+        object += term;
 
         currentTermStart = nextTermStart;
     }    

@@ -68,6 +68,9 @@ void RunApplication() {
     p5 += p6;
     std::cout << "p5 += p6; p5: " << p5 << '\n';
 
+    std::cout << "p5: " << p5 << '\n';
+    std::cout << "p6: " << p6 << '\n';
+
     p5 *= p6;
     std::cout << "p5 *= p6; p5: " << p5 << '\n';
 }
