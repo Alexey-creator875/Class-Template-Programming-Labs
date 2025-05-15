@@ -62,3 +62,6 @@
 
 # Ignore debug dir
 .vscode
+
+# Ignore debug dir
+test.cpp
