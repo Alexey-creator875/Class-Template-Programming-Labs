@@ -10,7 +10,7 @@
 namespace {
 const size_t kBufferSize = 40;
 
-void AddComponentToConteiner(MyStack<Product*>& container) {
+void AddComponentToContainer(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -41,7 +41,7 @@ void AddComponentToConteiner(MyStack<Product*>& container) {
     container.push(new Component(mass, material, name));
 }
 
-void AddAssemblyUnitToConteiner(MyStack<Product*>& container) {
+void AddAssemblyUnitToContainer(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -62,7 +62,7 @@ void AddAssemblyUnitToConteiner(MyStack<Product*>& container) {
     container.push(new AssemblyUnit(mass, material, name, structuralPartsNumber));
 }
 
-void AddMechanismToConteiner(MyStack<Product*>& container) {
+void AddMechanismToContainer(MyStack<Product*>& container) {
     int mass = 0;
     std::cout << "Enter mass:\n";
     std::cin >> mass;
@@ -165,13 +165,13 @@ void AddProductToContainer(MyStack<Product*>& container) {
 
     switch (static_cast<ProductType>(productType)) {
         case ProductType::Component:
-            AddComponentToConteiner(container);
+            AddComponentToContainer(container);
             break;
         case ProductType::AssemblyUnit:
-            AddAssemblyUnitToConteiner(container);
+            AddAssemblyUnitToContainer(container);
             break;
         case ProductType::Mechanism:
-            AddMechanismToConteiner(container);
+            AddMechanismToContainer(container);
             break;
     }
 }
