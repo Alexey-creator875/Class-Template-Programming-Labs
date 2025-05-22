@@ -16,11 +16,8 @@ namespace {
 const char kInputFileName[] = "input.txt";
 const char kOutputFileName[] = "output.txt";
 
-const double kMinRandomNumberFourthTask = -50.;
-const double kMaxRandomNumberFourthTask = 50.;
-
-const double kMinRandomNumberSixthTask = -50.;
-const double kMaxRandomNumberSixthTask = 50.;
+const double kMinRandomNumber = -50.;
+const double kMaxRandomNumber = 50.;
 
 const size_t kInitialVectorSize = 10;
 const int kPrecision = 2;
@@ -31,7 +28,7 @@ const size_t kInitialListSize = 10;
 double GenerateRandomRealNumber() {
     std::random_device r{};
     std::default_random_engine randomEngine(r());
-    std::uniform_real_distribution<double> segment(kMinRandomNumberFourthTask, kMaxRandomNumberFourthTask);
+    std::uniform_real_distribution<double> segment(kMinRandomNumber, kMaxRandomNumber);
 
     return segment(randomEngine);
 }
