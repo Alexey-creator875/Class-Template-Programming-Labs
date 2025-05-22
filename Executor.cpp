@@ -1,5 +1,6 @@
 #include "Executor.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <fstream>
@@ -22,15 +23,15 @@ const double kMinRandomNumberSixthTask = -50.;
 const double kMaxRandomNumberSixthTask = 50.;
 
 const size_t kInitialVectorSize = 10;
-const int kPrecision = 3;
+const int kPrecision = 2;
 const int kRemoveIndex = 8;
 
 const size_t kInitialListSize = 10;
 
-double GenerateRandomRealNumber(double min, double max) {
+double GenerateRandomRealNumber() {
     std::random_device r{};
     std::default_random_engine randomEngine(r());
-    std::uniform_real_distribution<double> segment(min, max);
+    std::uniform_real_distribution<double> segment(kMinRandomNumberFourthTask, kMaxRandomNumberFourthTask);
 
     return segment(randomEngine);
 }
@@ -103,14 +104,17 @@ void PerformFirstTask() {
     std::string name;
     std::cout << "Enter your name:\n";
     std::cin >> name;
+    name[0] = std::toupper(name[0]);
 
     std::string middleName;
     std::cout << "Enter your patronymic:\n";
     std::cin >> middleName;
+    middleName[0] = std::toupper(middleName[0]);
 
     std::string surname;
     std::cout << "Enter your surname:\n";
     std::cin >> surname;
+    surname[0] = std::toupper(surname[0]);
 
     std::string fullName;
     fullName += name;
@@ -128,30 +132,19 @@ void PerformSecondTask() {
     std::getline(std::cin, text);
     std::getline(std::cin, text);
 
-    std::string textEnclosedInBrackets;
-
-    size_t index = 0;
-
-    while (index < text.length() && text[index] != '[') {
-        ++index;
-    }
-
-    if (index == text.length()) {
+    if (text.find('[') == std::string::npos) {
         std::cout << "Opening bracket not found\n";
         return;
     }
 
-    ++index;
-
-    while (index < text.length() && text[index] != ']') {
-        textEnclosedInBrackets += text[index];
-        ++index;
-    }
-
-    if (text[index] != ']') {
+    if (text.find(']') == std::string::npos) {
         std::cout << "Closing bracket not found\n";
         return;
     }
+
+    std::string textEnclosedInBrackets;
+
+    std::copy(text.begin() + text.find('[') + 1, text.begin() + text.rfind(']'), std::back_insert_iterator<std::string>(textEnclosedInBrackets));
 
     std::cout << "Text enclosed in brackets:\n" << textEnclosedInBrackets << '\n';
 }
@@ -168,7 +161,7 @@ void PerformThirdTask() {
     std::ofstream outputFile(kOutputFileName, std::ios::trunc);
 
     while (std::getline(inputFile, line)) {
-        if (line[line.length() - 1] == '!') {
+        if (*(--line.end()) == '!') {
             outputFile << line << '\n';
         }
     }
@@ -180,24 +173,15 @@ void PerformThirdTask() {
 }
 
 void PerformFourthTask() {
-    std::vector<double> vector;
-
-    for (size_t i = 0; i < kInitialVectorSize; ++i) {
-        vector.push_back(GenerateRandomRealNumber(kMinRandomNumberFourthTask, kMaxRandomNumberFourthTask));
-    }
+    std::vector<double> vector(kInitialVectorSize);
+    std::generate(vector.begin(), vector.end(), GenerateRandomRealNumber);
 
     std::cout << "Vector\n";
     PrintVectorFourthTask(vector);
 
-    double average = 0.;
-    std::vector<double>::iterator p = vector.begin();
-
-    while (p != vector.end()) {
-        average += *p;
-        ++p;
-    }
-
+    double average = std::accumulate(vector.begin(), vector.end(), 0.);
     average /= vector.size();
+
     std::cout << "Average:\n" << average << '\n';
 
     std::vector<double> newVector;
@@ -228,37 +212,23 @@ void PerformFifthTask() {
 
     PrintVectorFifthTask(vector);
 
-    Box largestBox;
+    Box largestBox = *std::max_element(vector.begin(), vector.end());
 
-    for (auto box : vector) {
-        if (largestBox < box) {
-            largestBox = box;
-        }
-    }
-
-    std::cout << "The largest box:\n";
+    std::cout << "The largest box parameters:\n";
     std::cout << largestBox.getWidth() << ' ' << largestBox.getHeight() << ' ' << largestBox.getLength() << '\n';
+    std::cout << "The volume is " << largestBox.getWidth() * largestBox.getHeight() * largestBox.getLength() << '\n';
 }
 
 void PerformSixthTask() {
-    std::list<double> list;
-
-    for (size_t i = 0; i < kInitialListSize; ++i) {
-        list.push_back(GenerateRandomRealNumber(kMinRandomNumberSixthTask, kMaxRandomNumberSixthTask));
-    }
+    std::list<double> list(kInitialListSize);
+    std::generate(list.begin(), list.end(), GenerateRandomRealNumber);
 
     std::cout << "First list\n";
     PrintListSixthTask(list);
 
-    double average = 0;
-
-    std::list<double>::iterator iter;
-
-    for (iter = list.begin(); iter != list.end(); ++iter) {
-        average += *iter;
-    }
-
+    double average = std::accumulate(list.begin(), list.end(), 0.);
     average /= list.size();
+
     std::cout << "Average:\n" << average << '\n';
 
     std::list<double> newList;
@@ -274,11 +244,8 @@ void PerformSixthTask() {
 
     std::list<double>::iterator remove = list.begin();
 
-    for (size_t i = 0; i < kRemoveIndex; ++i) {
-        ++remove;
-    }
+    list.erase(std::next(list.begin(), kRemoveIndex));
 
-    list.erase(remove);
     std::cout << "Remove eighth element from first list\n";
     PrintListSixthTask(list);
 }
@@ -295,13 +262,7 @@ void PerformSeventhTask() {
 
     PrintListSeventhTask(list);
 
-    Graduate bestGraduate;
-
-    for (auto graduate : list) {
-        if (bestGraduate < graduate) {
-            bestGraduate = graduate;
-        }
-    }
+    Graduate bestGraduate = *std::max_element(list.begin(), list.end());
 
     std::cout << "The best graduate\n";
     std::cout << bestGraduate.getName() << ' ' << bestGraduate.getRating() << '\n';
@@ -310,11 +271,7 @@ void PerformSeventhTask() {
     std::cout << "Enter number on which you want to increase rating of all graduates:\n";
     std::cin >> increment;
 
-    std::list<Graduate>::iterator iter;
-
-    for (iter = list.begin(); iter != list.end(); ++iter) {
-        (*iter).setRating((*iter).getRating() + increment);
-    }
+    std::for_each(list.begin(), list.end(), [increment](Graduate& x) {x.setRating(x.getRating() + increment);});
 
     std::cout << "New list\n";
     PrintListSeventhTask(list);
@@ -369,14 +326,9 @@ void PerformNinthTask() {
     map["Демин"] = 99;
     map["Черепанов"] = 111;
 
-    int sum = 0;
-
-    for (auto pair : map) {
-        sum += pair.second;
-    }
+    int sum = std::accumulate(map.begin(), map.end(), 0, [] (int sum, std::pair<std::string, int> pair) { return sum + pair.second; });
 
     std::cout << "Total collected: " << sum << " products\n";
-
     PrintMapNinthTask(map);
 }
 
@@ -385,7 +337,7 @@ void RunApplication() {
 
     while (continueExecution) {
         int task = 0;
-        std::cout << "\nEnter the number from 1 to 9 to choose \n"
+        std::cout << "\nEnter the number from 1 to 9 to choose task\n"
                   << "Enter '0' to finish\n";
         std::cin >> task;
 
